@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Engel Fax</string>
+    <string name="action_settings">Settings</string>
+    <string name="title">Nachricht an den Engel</string>
+    <string name="sub_title">Macht sie fettich!</string>
+    <string name="hint">Deine Nachricht an den Engel...</string>
+    <string name="number">TODO</string>
+    <string name="delivered">Nachricht wurde dem Engel zugestellt</string>
+    <string name="sent">Nachricht wurde an den Engel gesendet!</string>
+    <string name="error_not_delivered">Fehler: Nachricht konnte nicht gesendet werden</string>
+    <string name="error_radio_off">Fehler: Flugzeugmodus!</string>
+    <string name="error_no_message">Fehler: Keine Nachricht für Engel eingegeben!</string>
+    <string name="error_null_pdu">Fehler: Kein Netz!</string>
+    <string name="error_no_service">Fehler: Kein Netz!</string>
+    <string name="error_generic">Fehler: Allgemeiner Fehler!</string>
+
+</resources>

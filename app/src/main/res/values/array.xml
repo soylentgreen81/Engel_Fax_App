@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="styles">
+        <item>Ohne</item>
+        <item>Batman</item>
+        <item>Kuh</item>
+        <item>Kuh mit Bong</item>
+        <item>Stimpy</item>
+        <item>Ren</item>
+        <item>3D</item>
+        <item>Font groß</item>
+        <item>Font größer</item>
+        <item>Font Block</item>
+    </string-array>
+</resources>
