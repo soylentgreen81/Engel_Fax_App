@@ -58,27 +58,27 @@ public class EngelMessenger extends AppCompatActivity {
         sentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                String message = null;
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
-                        Snackbar.make(fab, getString(R.string.sent), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        message = getString(R.string.sent);
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Snackbar.make(fab, getString(R.string.error_generic), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        message =  getString(R.string.error_generic);
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Snackbar.make(fab, R.string.error_no_service, Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        message = getString(R.string.error_no_service);
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Snackbar.make(fab, getString(R.string.error_null_pdu), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();                        break;
+                        message =  getString(R.string.error_null_pdu);
+                        break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Snackbar.make(fab, getString(R.string.error_radio_off), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        message =  getString(R.string.error_radio_off);
                         break;
                 }
+                if (message != null)
+                    Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 fab.setEnabled(true);
                 nachrichtEditText.setText("", TextView.BufferType.EDITABLE);
                 nachrichtEditText.setEnabled(true);
@@ -88,14 +88,18 @@ public class EngelMessenger extends AppCompatActivity {
         deliveredReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                String message = null;
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
-                        Snackbar.make(fab, getString(R.string.delivered), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();                        break;
+                        message = getString(R.string.delivered);
+                        break;
                     case Activity.RESULT_CANCELED:
-                        Snackbar.make(fab, getString(R.string.error_not_delivered), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();                        break;
+                        message = getString(R.string.error_not_delivered);
+                        break;
                 }
+                if (message != null)
+                    Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
             }
             };
 
