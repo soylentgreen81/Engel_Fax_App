@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Engel Fax</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Ascii Art Preview</string>
     <string name="title">Nachricht an den Engel</string>
     <string name="sub_title">Macht sie fettich!</string>
     <string name="hint">Deine Nachricht an den Engel...</string>
