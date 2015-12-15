@@ -12,8 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.github.lalyos.jfiglet.FigletFont;
+
 import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -30,7 +33,7 @@ public class EngelSelectStyle extends AppCompatActivity {
         CustomGestureDetector customGestureDetector = new CustomGestureDetector();
         mGestureDetector = new GestureDetector(this, customGestureDetector);
         // Set in/out flipping animations
-
+        final String text = getIntent().getStringExtra(EngelMessenger.TEXT_KEY);
         int[] ressources = {R.raw.batman, R.raw.bolizei, R.raw.faschistan1, R.raw.cat, R.raw.einhorn, R.raw.einhorn2, R.raw.eule, R.raw.face, R.raw.gammler, R.raw.party, R.raw.partybot, R.raw.roflkopter};
         int black = Color.parseColor("#000000");
         int white = Color.parseColor("#ffffff");
@@ -43,12 +46,22 @@ public class EngelSelectStyle extends AppCompatActivity {
                 newView.setTextColor(white);
                 newView.setBackgroundColor(black);
                 newView.setTypeface(Typeface.MONOSPACE);
-                newView.setText(s);
-                mViewFlipper.addView(newView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+                newView.setText(s+"\n"+text);
+                mViewFlipper.addView(newView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             }
         } catch(Exception ex){
 
          }
+        TextView newView = new TextView(this);
+        newView.setTextColor(white);
+        newView.setBackgroundColor(black);
+        newView.setTypeface(Typeface.MONOSPACE);
+        try {
+            newView.setText(FigletFont.convertOneLine(text));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mViewFlipper.addView(newView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {

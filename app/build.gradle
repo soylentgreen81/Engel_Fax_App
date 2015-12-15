@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+    }
 }
 
 dependencies {
@@ -25,4 +28,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'commons-io:commons-io:2.4'
+    compile 'com.github.lalyos:jfiglet:0.0.7'
 }

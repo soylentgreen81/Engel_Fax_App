@@ -35,6 +35,7 @@ public class EngelMessenger extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         phoneNumber = getString(R.string.action_settings);
         styleMap.put("", "Ohne");
@@ -53,6 +54,8 @@ public class EngelMessenger extends AppCompatActivity {
         nachrichtEditText = (EditText)  findViewById(R.id.nachrichtEditText);
         styleSpinner = (Spinner) findViewById(R.id.styleSpinner);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton previewButton = (FloatingActionButton) findViewById(R.id.preview);
+
         LinkedHashMapAdapter<String, String> styleAdapter =  new LinkedHashMapAdapter<String, String>(this, android.R.layout.simple_spinner_item, styleMap);
         styleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         styleSpinner.setAdapter(styleAdapter);
@@ -107,9 +110,9 @@ public class EngelMessenger extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String text =  nachrichtEditText.getText().toString();
+                final String text =  getText();
                 if (!text.trim().equals("")) {
-                    String prefix = ((Map.Entry<String,String>)styleSpinner.getSelectedItem()).getKey();
+                    String prefix = getStyle();
 
                     nachrichtEditText.setEnabled(false);
                     fab.setEnabled(false);
@@ -123,6 +126,13 @@ public class EngelMessenger extends AppCompatActivity {
                     Snackbar.make(fab, getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
+            }
+        });
+        previewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startPreview();
+
             }
         });
     }
@@ -143,16 +153,21 @@ public class EngelMessenger extends AppCompatActivity {
         unregisterReceiver(deliveredReceiver);
     }
 
-    private final String STYLE_KEY = "STYLE";
-    private final String TEXT_KEY = "TEXT";
+    public static final String STYLE_KEY = "STYLE";
+    public static final String TEXT_KEY = "TEXT";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(STYLE_KEY, ((Map.Entry<String, String>) styleSpinner.getSelectedItem()).getKey());
-        outState.putString(TEXT_KEY, nachrichtEditText.getText().toString());
+        outState.putString(STYLE_KEY, getStyle());
+        outState.putString(TEXT_KEY, getText());
     }
-
+    private String getStyle(){
+        return ((Map.Entry<String, String>) styleSpinner.getSelectedItem()).getKey();
+    }
+    private String getText(){
+        return nachrichtEditText.getText().toString();
+    }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -173,13 +188,19 @@ public class EngelMessenger extends AppCompatActivity {
         inflater.inflate(R.menu.menu_engel_messenger, menu);
         return true;
     }
+    private void startPreview(){
+        Intent intent = new Intent(this, EngelSelectStyle.class);
+        intent.putExtra(TEXT_KEY, getText());
+        intent.putExtra(STYLE_KEY, getStyle());
+        startActivity(intent);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intent = new Intent(this, EngelSelectStyle.class);
-                startActivity(intent);
+                startPreview();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
