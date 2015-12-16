@@ -20,6 +20,12 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
     }
+
+        sourceSets {
+            androidTest.setRoot( 'src/test' )
+
+        }
+
 }
 
 dependencies {
@@ -28,5 +34,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'commons-io:commons-io:2.4'
-    compile 'com.github.lalyos:jfiglet:0.0.7'
+    androidTestCompile 'junit:junit:4.12'
 }

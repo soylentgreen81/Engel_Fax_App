@@ -37,6 +37,8 @@ public class EngelMessenger extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_engel_messenger);
+
         phoneNumber = getString(R.string.action_settings);
         styleMap.put("", "Ohne");
         styleMap.put("#AB ", "Batman");
@@ -48,7 +50,6 @@ public class EngelMessenger extends AppCompatActivity {
         styleMap.put("#FS ", "Font 2");
         styleMap.put("#F3 ", "Font 3");
         styleMap.put("#FI ", "Font 3D");
-        setContentView(R.layout.activity_engel_messenger);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         nachrichtEditText = (EditText)  findViewById(R.id.nachrichtEditText);
@@ -182,12 +183,12 @@ public class EngelMessenger extends AppCompatActivity {
             pos++;
         }
     }
-    @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_engel_messenger, menu);
         return true;
-    }
+    }*/
     private void startPreview(){
         Intent intent = new Intent(this, EngelSelectStyle.class);
         intent.putExtra(TEXT_KEY, getText());
@@ -195,7 +196,7 @@ public class EngelMessenger extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
@@ -206,5 +207,5 @@ public class EngelMessenger extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+*/
 }
