@@ -25,9 +25,12 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import software.oi.engelfax.jfiglet.FigletFont;
+import software.oi.engelfax.util.FigletPrinter;
 import software.oi.engelfax.util.TextUtils;
 
 /**
@@ -38,6 +41,8 @@ public class EngelSelectStyle extends AppCompatActivity {
     private GestureDetector mGestureDetector;
     private Spinner styleChooser;
     private static final String TAG = EngelSelectStyle.class.getSimpleName();
+    private LinkedHashMap<String, String> arts = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> fonts = new LinkedHashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,48 +54,43 @@ public class EngelSelectStyle extends AppCompatActivity {
 
         // Set in/out flipping animations
         final String text = TextUtils.wordWrap(getIntent().getStringExtra(EngelMessenger.TEXT_KEY), 24);
-        int[] resources = {R.raw.batman, R.raw.bolizei, R.raw.faschistan1, R.raw.cat, R.raw.einhorn, R.raw.einhorn2, R.raw.eule, R.raw.face, R.raw.gammler, R.raw.party, R.raw.partybot, R.raw.roflkopter};
-        int[] figlets = {R.raw.banner3d, R.raw.contessa, R.raw.cybermedium, R.raw.isometric4, R.raw.larry3d, R.raw.mini, R.raw.shortf, R.raw.straight};
+        try {
+            readCSV("asciiart/art.csv", arts);
+            readCSV("fonts/fonts.csv", fonts);
 
-        int black = Color.parseColor("#000000");
-        int white = Color.parseColor("#ffffff");
+        }
+        catch (Exception ex){
+
+        }
         int id = 0;
-        for (int res : resources) {
-            TextView newView = new TextView(this);
-            newView.setTextColor(white);
-            newView.setBackgroundColor(black);
-            newView.setTypeface(Typeface.MONOSPACE);
+        for (String asciiArt: arts.keySet()) {
+            TextView newView = createTextView();
             try {
-                InputStream is = getResources().openRawResource(res);
+                InputStream is = getAssets().open("asciiart/" + asciiArt);
                 String s = IOUtils.toString(is);
                 IOUtils.closeQuietly(is);
                 newView.setText(text + "\n" + s);
             }
-            catch (Exception ex){
-                newView.setText(ex.getMessage());
+            catch (Exception e){
+                newView.setText(e.getMessage());
             }
-            data.put(id, "ID: "+ id);
+            data.put(id, asciiArt);
             mViewFlipper.addView(newView, id, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             id++;
         }
 
-        for (int figlet : figlets) {
-
-            TextView newView = new TextView(this);
-            newView.setTextColor(white);
-            newView.setBackgroundColor(black);
-            newView.setTypeface(Typeface.MONOSPACE);
+        for (String font : fonts.keySet()) {
+            TextView newView = createTextView();
             try {
-                InputStream fontIn = getResources().openRawResource(figlet);
-                newView.setText(FigletFont.convertOneLine(fontIn, text, 24));
-                fontIn.close();
+                InputStream is = getAssets().open("fonts/" + font + ".flf");
+                String figletText = TextUtils.wordWrap(text, 24, new FigletPrinter(new FigletFont(is)));
+                newView.setText(figletText);
+                IOUtils.closeQuietly(is);
             }
             catch(Exception e){
                 newView.setText(e.getMessage());
-                e.printStackTrace();
             }
-            newView.setVerticalScrollBarEnabled(true);
-            data.put(id, "ID: "+ id);
+            data.put(id, font);
             mViewFlipper.addView(newView, id, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             id++;
         }
@@ -108,6 +108,22 @@ public class EngelSelectStyle extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void readCSV(String path, Map<String, String> theMap) throws IOException{
+        InputStream in = getAssets().open(path);
+        TextUtils.readCSV(IOUtils.toString(in), theMap);
+        IOUtils.closeQuietly(in);
+    }
+    private TextView createTextView(){
+        TextView newView = new TextView(this);
+        newView.setTextColor(Color.WHITE);
+        newView.setBackgroundColor(Color.BLACK);
+        newView.setTypeface(Typeface.MONOSPACE);
+
+        newView.setVerticalScrollBarEnabled(true);
+        return newView;
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {

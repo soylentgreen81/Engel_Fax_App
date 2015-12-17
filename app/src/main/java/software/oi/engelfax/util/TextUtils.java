@@ -1,57 +1,68 @@
 package software.oi.engelfax.util;
 
+import org.apache.commons.io.IOUtils;
+
+import java.util.Map;
+
 /**
  * Created by stefa_000 on 16.12.2015.
  */
 public abstract class TextUtils {
-
     public static String wordWrap(String input, final int lineWidth){
+        return wordWrap(input, lineWidth, new SimplePrinter());
+    }
+
+    public static String wordWrap(String input, final int lineWidth, TextPrinter printer){
         String[] lines = input.replace("\r\n", "\n").replace("\r", "\n").split("\n");
         StringBuffer result = new StringBuffer();
         for (int l = 0;l<lines.length;l++){
             String line = lines[l];
             String[] words = line.split("[ \t]");
             int counter = 0;
-            for (int i=0;i<words.length;i++){
+            int spaceWidth = printer.getLength(" ");
+            for (int i=0;i<words.length;i++) {
                 String word = words[i];
-                int length = word.length();
-                if (counter + length <=lineWidth) {
+                int length = printer.getLength(word);
+                if (length <= lineWidth) {
+                    if (counter + length > lineWidth) {
+                        printer.printBreak();
+                        counter = 0;
+                    }
                     counter += length;
-                    result.append(word);
-                    if (i<words.length-1 && (counter+words[i+1].length()) <=lineWidth){
-                        result.append(" ");
-                        counter++;
+                    printer.print(word);
+                    if (i < words.length - 1 && counter+ printer.getLength( words[i + 1])  <= lineWidth) {
+                        printer.print(" ");
+                        counter += spaceWidth;
                     }
                 }
-                else {
-                    if (length <= lineWidth) {
-                        result.append("\n");
-                        result.append(word);
-                        counter = length;
-                        if (i<words.length-1 && counter <lineWidth){
-                            result.append(" ");
-                            counter++;
+                else { //Wort ist zu lang für eine Zeile
+
+                    for (int j = 0;j<word.length();j++){
+                        char c = word.charAt(j);
+                        int charLength = printer.getLength(c);
+                        if (charLength + counter >lineWidth) {
+                            printer.printBreak();
+                            counter = 0;
                         }
-                    } else {
-                        if (i>0)
-                            result.append("\n");
-                        int count = (int) Math.ceil((double)word.length() / lineWidth);
-                        for (int j=0;j<count; j++){
-                            int start = j*lineWidth;
-                            int end = ((j+1)*lineWidth);
-                            if (start+end > word.length())
-                                end = word.length();
-                            result.append(word.substring(start,end ));
-                            if (j+1<count)
-                                result.append("\n");
-                        }
+                        printer.print(c);
+                        counter+=charLength;
                     }
+
                 }
+
 
             }
             if (l+1<lines.length)
-                result.append("\n");
+                printer.printBreak();
         }
-        return result.toString();
+        return printer.toString();
+    }
+    public static void readCSV(String input, Map<String, String> theMap){
+        String[] rawCodes = input.split("\n");
+        for (String line : rawCodes){
+            String[] items = line.split(";");
+            if (items.length == 2)
+                theMap.put(items[1].trim(), items[0].trim());
+        }
     }
 }

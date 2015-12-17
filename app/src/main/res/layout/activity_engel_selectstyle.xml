@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/styleSpinner"
+        android:ems="10"
         />
     <ViewFlipper
     android:layout_width="match_parent"

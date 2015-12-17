@@ -200,25 +200,4 @@ public class FigletFont {
         return buffer.toString();
     }
 
-    public static String convertOneLine(InputStream fontFileStream, String message, int size) throws IOException {
-        return new FigletFont(fontFileStream).convert(message, size);
-    }
-
-
-
-    public static String convertOneLine(File fontFile, String message, int size) throws IOException {
-        return convertOneLine(new FileInputStream(fontFile), message,size);
-    }
-
-    public static String convertOneLine(String fontPath, String message, int size) throws IOException {
-        InputStream fontStream = null;
-        if (fontPath.startsWith("classpath:")) {
-            fontStream = FigletFont.class.getResourceAsStream(fontPath.substring(10));
-        } else if (fontPath.startsWith("http://") || fontPath.startsWith("https://")) {
-            fontStream = new URL(fontPath).openStream();
-        } else {
-            fontStream = new FileInputStream(fontPath);
-        }
-        return convertOneLine(fontStream, message,size);
-    }
 }
