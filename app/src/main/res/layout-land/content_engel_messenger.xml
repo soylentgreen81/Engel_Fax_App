@@ -21,19 +21,7 @@
         android:layout_alignParentStart="true"
         android:layout_weight="1" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:id="@+id/linearLayout2">
 
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/styleSpinner"
-            android:layout_gravity="center_horizontal" />
 
         <EditText
             android:layout_width="match_parent"
@@ -43,6 +31,5 @@
             android:id="@id/nachrichtEditText"
             android:hint="@string/hint" />
 
-    </LinearLayout>
 
 </LinearLayout>

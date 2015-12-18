@@ -9,18 +9,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_engel_messenger" tools:context=".EngelMessenger">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/nachrichtEditText"
-        android:layout_below="@+id/styleSpinner"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/styleSpinner"
-        android:layout_alignEnd="@+id/styleSpinner"
-        android:hint="@string/hint" />
+
 
     <ImageView
         android:layout_width="wrap_content"
@@ -32,17 +21,17 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <Spinner
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/styleSpinner"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/nachrichtEditText"
         android:layout_below="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/imageView"
         android:layout_alignEnd="@+id/imageView"
-
-        />
+        android:hint="@string/hint" />
 
 </RelativeLayout>

@@ -57,12 +57,5 @@ public abstract class TextUtils {
         }
         return printer.toString();
     }
-    public static void readCSV(String input, Map<String, String> theMap){
-        String[] rawCodes = input.split("\n");
-        for (String line : rawCodes){
-            String[] items = line.split(";");
-            if (items.length == 2)
-                theMap.put(items[1].trim(), items[0].trim());
-        }
-    }
+
 }
