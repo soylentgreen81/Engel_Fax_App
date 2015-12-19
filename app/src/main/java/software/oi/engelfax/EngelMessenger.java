@@ -38,10 +38,6 @@ public class EngelMessenger extends AppCompatActivity {
         setSupportActionBar(toolbar);
         nachrichtEditText = (EditText)  findViewById(R.id.nachrichtEditText);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-
-
-
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,28 +66,22 @@ public class EngelMessenger extends AppCompatActivity {
         nachrichtEditText.setText(savedInstanceState.getString(TEXT_KEY));
 
     }
-  /*  @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_engel_messenger, menu);
-        return true;
-    }*/
+    static final int REQUEST_SMS = 1;
+
     private void startPreview(){
-        Intent intent = new Intent(this, EngelSelectStyle.class);
+        Intent intent = new Intent(this, EngelPreview.class);
         intent.putExtra(TEXT_KEY, getText());
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_SMS);
+
     }
 
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                startPreview();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_SMS && resultCode == Activity.RESULT_OK){
+            Snackbar.make(fab, getResources().getString(R.string.sent), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
         }
     }
-*/
+
 }
