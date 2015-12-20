@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -232,6 +233,7 @@ public class EngelPreview extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_engel_preview, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            textView.setTypeface(Typeface.MONOSPACE);
             textView.setText(getArguments().getString(PREVIEW_TEXT));
             textView.setMovementMethod(new ScrollingMovementMethod());
             return rootView;
