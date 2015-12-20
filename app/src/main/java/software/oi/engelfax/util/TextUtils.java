@@ -11,6 +11,48 @@ public abstract class TextUtils {
     public static String wordWrap(String input, final int lineWidth){
         return wordWrap(input, lineWidth, new SimplePrinter());
     }
+    public static String cowWrap(String input, final int lineWidth){
+        StringBuffer result = new StringBuffer();
+        final int realWidth = lineWidth - 2;
+        String wrapped = wordWrap(input, realWidth);
+        String[] lines = wrapped.split("\n");
+
+        String topLine =  ' ' + padRight("", realWidth).replace(' ', '_') + ' ';
+        String bottomLine = topLine.replace('_', '-');
+        result.append(topLine);
+        result.append("\n");
+        for (int i=0;i<lines.length;i++){
+            char borderLeft;
+            char borderRight;
+            if (lines.length == 1) {
+                borderLeft = '<';
+                borderRight = '>';
+            }
+            else{
+                if (i == 0) {
+                    borderLeft = '/';
+                    borderRight = '\\';
+                } else if (i == lines.length-1){
+                    borderLeft = '\\';
+                    borderRight = '/';
+                }
+                else {
+                    borderLeft = borderRight = '|';
+                }
+            }
+            String line = lines[i];
+            result.append(borderLeft);
+            result.append(padRight(line, realWidth));
+            result.append(borderRight);
+            result.append("\n");
+        }
+        result.append(bottomLine);
+        return result.toString();
+
+    }
+    public static String padRight(String s, int n) {
+        return String.format("%1$-" + n + "s", s);
+    }
 
     public static String wordWrap(String input, final int lineWidth, TextPrinter printer){
         String[] lines = input.replace("\r\n", "\n").replace("\r", "\n").split("\n");

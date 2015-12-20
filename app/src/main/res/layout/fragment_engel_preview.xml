@@ -8,8 +8,9 @@
     tools:context="software.oi.engelfax.EngelPreview$PlaceholderFragment">
 
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
-        android:layout_height="match_parent" android:background="#000"
+        android:layout_height="match_parent" android:background="@drawable/back_preview"
         android:typeface="monospace"
+        android:padding="10dp"
         android:textColor="#fff"
         android:scrollbars="vertical"
         />

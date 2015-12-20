@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,9 +34,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +60,7 @@ public class EngelPreview extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private final static String ASCII_ART = "A";
     private final static String FIGLET = "F";
+    private final static String COWSAY = "C";
     private final static int WIDTH = 24;
     private Spinner styleChooser;
     private FloatingActionButton fab;
@@ -62,9 +68,8 @@ public class EngelPreview extends AppCompatActivity {
     private final String SMS_SENT = "SMS_SENT";
     private final String SMS_DELIVERED = "SMS_DELIVERED";
     private final String TAG = EngelPreview.class.getSimpleName();
-
+    private ArrayList<PreviewText> previews;
     private BroadcastReceiver sentReceiver;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -75,6 +80,7 @@ public class EngelPreview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_engel_preview);
         styleChooser = (Spinner) findViewById(R.id.styleSpinner);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -85,9 +91,20 @@ public class EngelPreview extends AppCompatActivity {
         sentReceiver = new SmsReceiver();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        //Load Preview Texts asynchronously
-        PreviewLoader loader = new PreviewLoader();
-        loader.execute(text);
+        //If screen is rotated, restore previewImages and jump to current position
+        // otherwise load Preview Texts asynchronously
+        if (savedInstanceState != null && savedInstanceState.containsKey(PREVIEWS)) {
+            previews = savedInstanceState.getParcelableArrayList(PREVIEWS);
+            int position = savedInstanceState.getInt(PREVIEW_POSITION);
+            showPreviews();
+            mViewPager.setCurrentItem(position);
+            styleChooser.setSelection(position);
+
+        } else {
+            PreviewLoader previewLoader = new PreviewLoader();
+            previewLoader.execute(text);
+        }
+
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -122,8 +139,33 @@ public class EngelPreview extends AppCompatActivity {
             }
         });
     }
+    public void onStart(){
+        super.onStart();
+        registerReceiver(sentReceiver, new IntentFilter(SMS_SENT));
 
-
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(sentReceiver);
+    }
+    private void showPreviews(){
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), previews);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        ArrayAdapter<PreviewText> styleAdapter = new ArrayAdapter<PreviewText>(EngelPreview.this,android.R.layout.simple_spinner_dropdown_item, previews);
+        styleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        styleChooser.setAdapter(styleAdapter);
+    }
+    public static final String PREVIEW_POSITION= "PREVIEW_POSITION";
+    public static final String PREVIEWS = "PREVIEWS";
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (previews != null) {
+            outState.putInt(PREVIEW_POSITION, mViewPager.getCurrentItem());
+            outState.putParcelableArrayList(PREVIEWS, previews);
+        }
+    }
 
 
     /**
@@ -168,7 +210,6 @@ public class EngelPreview extends AppCompatActivity {
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String PREVIEW_TEXT = "previewText";
 
         /**
@@ -212,33 +253,8 @@ public class EngelPreview extends AppCompatActivity {
                     .setAction("Action", null).show();
         }
     }
-    public void onStart(){
-        super.onStart();
-        registerReceiver(sentReceiver, new IntentFilter(SMS_SENT));
-
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(sentReceiver);
-    }
-    private static class PreviewText{
 
 
-        public PreviewText(String code, String title, String text) {
-            this.title = title;
-            this.code = code;
-            this.text = text;
-        }
-        public final String text;
-        public final String title;
-        public final String code;
-
-        @Override
-        public String toString() {
-            return title;
-        }
-    }
     private class SmsReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -265,17 +281,22 @@ public class EngelPreview extends AppCompatActivity {
 
                 Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
+            fab.setEnabled(true);
         }
     };
-    private class PreviewLoader extends AsyncTask<String, Void, List<PreviewText>> {
+    private class PreviewLoader extends AsyncTask<String, Void, ArrayList<PreviewText>> {
+
         private final String emptyLine = "\n" + String.format("%"+WIDTH+"s", "");
         private List<PreviewText> readCSV(String path, String csv, String prefix, String text) throws IOException {
             List<PreviewText> previewTexts = new ArrayList<>();
             InputStream in = getAssets().open(path + "/" + csv);
 
             String input = IOUtils.toString(in);
-            String wrappedText = TextUtils.wordWrap(text, WIDTH);
+            String wrappedText = "";
+            if (prefix.equals(COWSAY))
+                wrappedText = TextUtils.cowWrap(text, WIDTH);
+            else if (prefix.equals(ASCII_ART))
+                wrappedText = TextUtils.wordWrap(text, WIDTH);
             IOUtils.closeQuietly(in);
             String[] rawCodes = input.split("\n");
             for (String line : rawCodes){
@@ -305,6 +326,17 @@ public class EngelPreview extends AppCompatActivity {
                                 finalText = ex.getMessage();
                             }
                             break;
+                        case COWSAY:
+                            try {
+                                InputStream is = getAssets().open(path + "/" + items[1] + ".say");
+                                String cow = IOUtils.toString(is);
+                                IOUtils.closeQuietly(is);
+                                finalText = wrappedText + "\n" + cow;
+                            }
+                            catch (Exception ex){
+                                finalText = ex.getMessage();
+                            }
+                            break;
                     }
                     finalText+=emptyLine;
                     previewTexts.add(new PreviewText("#" + prefix + items[0], items[1], finalText));
@@ -314,13 +346,14 @@ public class EngelPreview extends AppCompatActivity {
 
         }
         @Override
-        protected List<PreviewText> doInBackground(String... textArray) {
-            List<PreviewText> texts = new ArrayList<>();
+        protected ArrayList<PreviewText> doInBackground(String... textArray) {
+            ArrayList<PreviewText> texts = new ArrayList<>();
             String text = textArray[0];
             texts.add(new PreviewText("", "Simple", TextUtils.wordWrap(text, 24) + emptyLine));
             try {
                 texts.addAll(readCSV("asciiart","art.csv", "A", text));
                 texts.addAll(readCSV("fonts","fonts.csv", "F", text));
+                texts.addAll(readCSV("cowsay", "cowsay.csv", "C", text));
             }
             catch (Exception ex){
 
@@ -330,13 +363,9 @@ public class EngelPreview extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(List<PreviewText> texts) {
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), texts);
-            mViewPager.setAdapter(mSectionsPagerAdapter);
-            ArrayAdapter<PreviewText> styleAdapter = new ArrayAdapter<PreviewText>(EngelPreview.this,android.R.layout.simple_spinner_dropdown_item, texts);
-            styleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            styleChooser.setAdapter(styleAdapter);
-
+        protected void onPostExecute(ArrayList<PreviewText> texts) {
+            previews = texts;
+            showPreviews();
         }
 
     }

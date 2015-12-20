@@ -56,16 +56,16 @@ public class EngelMessenger extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putString(TEXT_KEY, getText());
     }
-
-    private String getText(){
-        return nachrichtEditText.getText().toString();
-    }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         nachrichtEditText.setText(savedInstanceState.getString(TEXT_KEY));
 
     }
+    private String getText(){
+        return nachrichtEditText.getText().toString();
+    }
+
     static final int REQUEST_SMS = 1;
 
     private void startPreview(){
