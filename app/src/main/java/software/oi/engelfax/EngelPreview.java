@@ -244,6 +244,7 @@ public class EngelPreview extends AppCompatActivity {
 
             String prefix = ((PreviewText) styleChooser.getSelectedItem()).code;
             fab.setEnabled(false);
+            fab.setVisibility(View.INVISIBLE);
             PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(SMS_SENT), 0);
             PendingIntent deliveredPendintIntent= PendingIntent.getBroadcast(this, 0, new Intent(SMS_DELIVERED),0);
             SmsManager smsManager = SmsManager.getDefault();
@@ -284,6 +285,8 @@ public class EngelPreview extends AppCompatActivity {
                 Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             fab.setEnabled(true);
+            fab.setVisibility(View.VISIBLE);
+
         }
     };
     private class PreviewLoader extends AsyncTask<String, Void, ArrayList<PreviewText>> {

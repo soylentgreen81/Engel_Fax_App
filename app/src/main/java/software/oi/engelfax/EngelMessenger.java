@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,7 +28,7 @@ import java.util.Map;
 public class EngelMessenger extends AppCompatActivity {
     private static final String TAG = EngelMessenger.class.getSimpleName();
     private EditText nachrichtEditText;
-    private FloatingActionButton fab;
+    private ImageButton sendButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,8 +38,8 @@ public class EngelMessenger extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         nachrichtEditText = (EditText)  findViewById(R.id.nachrichtEditText);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        sendButton = (ImageButton) findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startPreview();
@@ -78,7 +79,7 @@ public class EngelMessenger extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SMS && resultCode == Activity.RESULT_OK){
-            Snackbar.make(fab, getResources().getString(R.string.sent), Snackbar.LENGTH_LONG)
+            Snackbar.make(nachrichtEditText, getResources().getString(R.string.sent), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
         }
