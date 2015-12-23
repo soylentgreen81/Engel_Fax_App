@@ -2,6 +2,7 @@
     <string name="app_name">Engel Fax</string>
     <string name="action_settings">Ascii Art Preview</string>
     <string name="title">Nachricht an den Engel</string>
+    <string name="paint_title">Mal dem Engel nen Bild!</string>
     <string name="sub_title">Macht sie fettich!</string>
     <string name="hint">Deine Nachricht an den Engel...</string>
     <string name="number">TODO</string>
@@ -13,5 +14,7 @@
     <string name="error_null_pdu">Fehler: Kein Netz!</string>
     <string name="error_no_service">Fehler: Kein Netz!</string>
     <string name="error_generic">Fehler: Allgemeiner Fehler!</string>
-
+    <string name="title_activity_engel_preview">EngelPreview</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="clear_image">Bild zurücksetzen</string>
 </resources>

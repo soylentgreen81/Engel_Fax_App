@@ -99,5 +99,16 @@ public abstract class TextUtils {
         }
         return printer.toString();
     }
+    public static String renderBitSet(BitSet bits, int width, int height, String block, String free){
+        StringBuffer result = new StringBuffer();
+        for (int l=0;l<height;l++) {
 
+            for (int c = 0; c < width; c++) {
+                result.append(bits.get(l*width + c) ? block : free);
+            }
+            if (l!=height - 1)
+                result.append("\n");
+        }
+        return result.toString();
+    }
 }
