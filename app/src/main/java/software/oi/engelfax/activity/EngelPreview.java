@@ -1,4 +1,4 @@
-package software.oi.engelfax;
+package software.oi.engelfax.activity;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +22,6 @@ import android.telephony.SmsManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,20 +31,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.apache.commons.io.IOUtils;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import software.oi.engelfax.PreviewText;
+import software.oi.engelfax.R;
 import software.oi.engelfax.jfiglet.FigletFont;
 import software.oi.engelfax.util.FigletPrinter;
 import software.oi.engelfax.util.TextUtils;
 
-public class EngelPreview extends AppCompatActivity {
+public class EngelPreview extends AppCompatActivity implements  LoaderFragment.TaskCallbacks {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -59,10 +54,10 @@ public class EngelPreview extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private final static String ASCII_ART = "A";
-    private final static String FIGLET = "F";
-    private final static String COWSAY = "C";
-    private final static int WIDTH = 24;
+    public final static String ASCII_ART = "A";
+    public final static String FIGLET = "F";
+    public final static String COWSAY = "C";
+    public final static int WIDTH = 24;
     private Spinner styleChooser;
     private FloatingActionButton fab;
     private String phoneNumber;
@@ -71,6 +66,8 @@ public class EngelPreview extends AppCompatActivity {
     private final String TAG = EngelPreview.class.getSimpleName();
     private ArrayList<PreviewText> previews;
     private BroadcastReceiver sentReceiver;
+    private static final String TAG_LOADER_FRAGMENT = "loader_fragment";
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -102,8 +99,14 @@ public class EngelPreview extends AppCompatActivity {
             styleChooser.setSelection(position);
 
         } else {
-            PreviewLoader previewLoader = new PreviewLoader();
-            previewLoader.execute(text);
+            android.app.FragmentManager fm = getFragmentManager();
+            LoaderFragment loaderFragment = (LoaderFragment) fm.findFragmentByTag(TAG_LOADER_FRAGMENT);
+            // If the Fragment is non-null, then it is currently being
+            // retained across a configuration change.
+            if (loaderFragment == null) {
+                loaderFragment = new LoaderFragment().newInstance(text);
+                fm.beginTransaction().add(loaderFragment, TAG_LOADER_FRAGMENT).commit();
+            }
         }
 
 
@@ -139,6 +142,8 @@ public class EngelPreview extends AppCompatActivity {
 
             }
         });
+
+
     }
     public void onStart(){
         super.onStart();
@@ -168,6 +173,17 @@ public class EngelPreview extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onPrexecute() {
+
+    }
+
+    @Override
+    public void onPostExecute(ArrayList<PreviewText> texts) {
+        this.previews = texts;
+        showPreviews();
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -182,15 +198,12 @@ public class EngelPreview extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             PreviewText text = texts.get(position);
-            return PlaceholderFragment.newInstance(text);
+            return PreviewFragment.newInstance(text);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return texts.size();
         }
 
@@ -203,42 +216,7 @@ public class EngelPreview extends AppCompatActivity {
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String PREVIEW_TEXT = "previewText";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(PreviewText previewText) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putString(PREVIEW_TEXT, previewText.text);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_engel_preview, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setTypeface(Typeface.MONOSPACE);
-            textView.setText(getArguments().getString(PREVIEW_TEXT));
-            textView.setMovementMethod(new ScrollingMovementMethod());
-            return rootView;
-        }
-    }
     private void sendSms(String text){
         if (!text.trim().equals("")) {
 
@@ -289,89 +267,5 @@ public class EngelPreview extends AppCompatActivity {
 
         }
     };
-    private class PreviewLoader extends AsyncTask<String, Void, ArrayList<PreviewText>> {
 
-        private final String emptyLine = "\n" + String.format("%"+WIDTH+"s", "");
-        private List<PreviewText> readCSV(String path, String csv, String prefix, String text) throws IOException {
-            List<PreviewText> previewTexts = new ArrayList<>();
-            InputStream in = getAssets().open(path + "/" + csv);
-
-            String input = IOUtils.toString(in);
-            String wrappedText = "";
-            if (prefix.equals(COWSAY))
-                wrappedText = TextUtils.cowWrap(text, WIDTH);
-            else if (prefix.equals(ASCII_ART))
-                wrappedText = TextUtils.wordWrap(text, WIDTH);
-            IOUtils.closeQuietly(in);
-            String[] rawCodes = input.split("\n");
-            for (String line : rawCodes){
-                String[] items = line.split(";");
-
-                if (items.length == 2) {
-                    String finalText = "";
-                    switch (prefix){
-                        case ASCII_ART:
-                            try {
-                                InputStream is = getAssets().open(path + "/" + items[1]);
-                                String asciiArt = IOUtils.toString(is);
-                                IOUtils.closeQuietly(is);
-                                finalText = wrappedText + "\n" + asciiArt;
-                            }
-                            catch (Exception ex){
-                                finalText = ex.getMessage();
-                            }
-                            break;
-                        case FIGLET:
-                            try {
-                                InputStream is = getAssets().open(path + "/" + items[1] + ".flf");
-                                finalText = TextUtils.wordWrap(text, 24, new FigletPrinter(new FigletFont(is)));
-                                IOUtils.closeQuietly(is);
-                            }
-                            catch (Exception ex){
-                                finalText = ex.getMessage();
-                            }
-                            break;
-                        case COWSAY:
-                            try {
-                                InputStream is = getAssets().open(path + "/" + items[1] + ".say");
-                                String cow = IOUtils.toString(is);
-                                IOUtils.closeQuietly(is);
-                                finalText = wrappedText + "\n" + cow;
-                            }
-                            catch (Exception ex){
-                                finalText = ex.getMessage();
-                            }
-                            break;
-                    }
-                    finalText+=emptyLine;
-                    previewTexts.add(new PreviewText("#" + prefix + items[0], items[1], finalText));
-                }
-            }
-            return previewTexts;
-
-        }
-        @Override
-        protected ArrayList<PreviewText> doInBackground(String... textArray) {
-            ArrayList<PreviewText> texts = new ArrayList<>();
-            String text = textArray[0];
-            texts.add(new PreviewText("", "Simple", TextUtils.wordWrap(text, 24) + emptyLine));
-            try {
-                texts.addAll(readCSV("asciiart","art.csv", "A", text));
-                texts.addAll(readCSV("fonts","fonts.csv", "F", text));
-                texts.addAll(readCSV("cowsay", "cowsay.csv", "C", text));
-            }
-            catch (Exception ex){
-
-            }
-            return texts;
-
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<PreviewText> texts) {
-            previews = texts;
-            showPreviews();
-        }
-
-    }
 }

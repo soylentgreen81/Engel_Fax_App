@@ -1,30 +1,19 @@
-package software.oi.engelfax;
+package software.oi.engelfax.activity;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import software.oi.engelfax.R;
 
 public class EngelMessenger extends AppCompatActivity {
     private static final String TAG = EngelMessenger.class.getSimpleName();

@@ -1,27 +1,22 @@
-package software.oi.engelfax;
+package software.oi.engelfax.activity;
 
 import android.content.Intent;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Base64;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.nio.Buffer;
-
+import software.oi.engelfax.R;
 import software.oi.engelfax.util.BitSet;
 import software.oi.engelfax.util.TextUtils;
 
@@ -35,6 +30,7 @@ public class PaintActivity extends AppCompatActivity {
     private final int VIEW_MODE = 2;
     private final int ERASE_MODE = 3;
     private int MODE = VIEW_MODE;
+    private float textSize = 1.0f;
     private float scale = 1.0f;
     private int scrollX = 0;
     private int scrollY = 0;
@@ -55,9 +51,11 @@ public class PaintActivity extends AppCompatActivity {
         else {
             bits = new BitSet(WIDTH * HEIGHT);
         }
+
         selectedModeId = R.id.viewMode;
         paintView = (TextView) findViewById(R.id.paintArea);
         paintView.setTypeface(Typeface.MONOSPACE);
+        textSize = paintView.getTextSize()/2;
         previewImage();
         sendButton = (ImageButton) findViewById(R.id.sendButton);
         final GestureDetector gd = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
@@ -70,18 +68,20 @@ public class PaintActivity extends AppCompatActivity {
                 if (scrollY < 0)
                     scrollY = 0;*/
 
-                paintView.scrollTo(scrollX, scrollY);
+                //paintView.scrollTo(scrollX, scrollY);
                 return true;
             }
         });
         final ScaleGestureDetector sgd = new ScaleGestureDetector(this, new ScaleGestureDetector.SimpleOnScaleGestureListener(){
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
-                    scale *= detector.getScaleFactor();
-                    scale = Math.max(0.1f, Math.min(scale, 2.0f));
+                    scale*= detector.getScaleFactor();
+                    scale = Math.max(0.1f, Math.min(scale, 1.5f));
+
+                    //paintView.setTextSize(textSize*scale);
+
                     paintView.setScaleX(scale);
                     paintView.setScaleY(scale);
-                    Log.d(TAG, String.format("ScrollX/Y %d/%d", paintView.getScrollX(), paintView.getScrollY()));
                     return true;
 
             }
@@ -167,6 +167,9 @@ public class PaintActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.clearImage:
                 bits.clear();
+                scale = 1.0f;
+                paintView.setScaleX(scale);
+                paintView.setScaleY(scale);
                 previewImage();
                 return true;
 
