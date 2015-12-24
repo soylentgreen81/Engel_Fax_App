@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.EngelMessenger"
+            android:name=".activity.MessengerActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.EngelPreview"
+            android:name=".activity.PreviewActivity"
             android:label="@string/title_activity_engel_preview"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>

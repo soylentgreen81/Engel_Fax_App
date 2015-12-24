@@ -146,8 +146,8 @@ public class PaintActivity extends AppCompatActivity {
 
                 }
                 String message = "#B" + new String(Base64.encode(reversed, Base64.NO_WRAP));
-                Intent intent = new Intent(PaintActivity.this, EngelPreview.class);
-                intent.putExtra(EngelMessenger.TEXT_KEY, message);
+                Intent intent = new Intent(PaintActivity.this, PreviewActivity.class);
+                intent.putExtra(MessengerActivity.TEXT_KEY, message);
                 startActivity(intent);
 
 

@@ -6,8 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,31 +17,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import software.oi.engelfax.PreviewText;
 import software.oi.engelfax.R;
-import software.oi.engelfax.jfiglet.FigletFont;
-import software.oi.engelfax.util.FigletPrinter;
-import software.oi.engelfax.util.TextUtils;
 
-public class EngelPreview extends AppCompatActivity implements  LoaderFragment.TaskCallbacks {
+public class PreviewActivity extends AppCompatActivity implements  PreviewLoaderFragment.TaskCallbacks {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -63,7 +50,7 @@ public class EngelPreview extends AppCompatActivity implements  LoaderFragment.T
     private String phoneNumber;
     private final String SMS_SENT = "SMS_SENT";
     private final String SMS_DELIVERED = "SMS_DELIVERED";
-    private final String TAG = EngelPreview.class.getSimpleName();
+    private final String TAG = PreviewActivity.class.getSimpleName();
     private ArrayList<PreviewText> previews;
     private BroadcastReceiver sentReceiver;
     private static final String TAG_LOADER_FRAGMENT = "loader_fragment";
@@ -84,7 +71,7 @@ public class EngelPreview extends AppCompatActivity implements  LoaderFragment.T
         setSupportActionBar(toolbar);
 
         // get Text
-        final String text = getIntent().getStringExtra(EngelMessenger.TEXT_KEY);
+        final String text = getIntent().getStringExtra(MessengerActivity.TEXT_KEY);
         phoneNumber = getString(R.string.number);
         sentReceiver = new SmsReceiver();
         // Set up the ViewPager with the sections adapter.
@@ -100,12 +87,12 @@ public class EngelPreview extends AppCompatActivity implements  LoaderFragment.T
 
         } else {
             android.app.FragmentManager fm = getFragmentManager();
-            LoaderFragment loaderFragment = (LoaderFragment) fm.findFragmentByTag(TAG_LOADER_FRAGMENT);
+            PreviewLoaderFragment previewLoaderFragment = (PreviewLoaderFragment) fm.findFragmentByTag(TAG_LOADER_FRAGMENT);
             // If the Fragment is non-null, then it is currently being
             // retained across a configuration change.
-            if (loaderFragment == null) {
-                loaderFragment = new LoaderFragment().newInstance(text);
-                fm.beginTransaction().add(loaderFragment, TAG_LOADER_FRAGMENT).commit();
+            if (previewLoaderFragment == null) {
+                previewLoaderFragment = new PreviewLoaderFragment().newInstance(text);
+                fm.beginTransaction().add(previewLoaderFragment, TAG_LOADER_FRAGMENT).commit();
             }
         }
 
@@ -158,7 +145,7 @@ public class EngelPreview extends AppCompatActivity implements  LoaderFragment.T
     private void showPreviews(){
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), previews);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        ArrayAdapter<PreviewText> styleAdapter = new ArrayAdapter<PreviewText>(EngelPreview.this,android.R.layout.simple_spinner_dropdown_item, previews);
+        ArrayAdapter<PreviewText> styleAdapter = new ArrayAdapter<PreviewText>(PreviewActivity.this,android.R.layout.simple_spinner_dropdown_item, previews);
         styleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         styleChooser.setAdapter(styleAdapter);
     }
@@ -174,8 +161,8 @@ public class EngelPreview extends AppCompatActivity implements  LoaderFragment.T
     }
 
     @Override
-    public void onPrexecute() {
-
+    public void onPreExecute() {
+        //TODO show Loading indicator
     }
 
     @Override
@@ -242,8 +229,8 @@ public class EngelPreview extends AppCompatActivity implements  LoaderFragment.T
             String message = null;
             switch (getResultCode()) {
                 case Activity.RESULT_OK:
-                    EngelPreview.this.setResult(Activity.RESULT_OK);
-                    EngelPreview.this.finish();
+                    PreviewActivity.this.setResult(Activity.RESULT_OK);
+                    PreviewActivity.this.finish();
                     break;
                 case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                     message =  getString(R.string.error_generic);

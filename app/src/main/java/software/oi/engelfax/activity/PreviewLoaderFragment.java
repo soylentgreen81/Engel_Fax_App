@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 
@@ -18,17 +19,23 @@ import software.oi.engelfax.util.FigletPrinter;
 import software.oi.engelfax.util.TextUtils;
 
 /**
- * Created by stefa_000 on 24.12.2015.
+ * Retained Fragment that loads the preview-"images" (a.k.a. textstrings)
+ * asynchronously. Create via PreviewLoaderFragment.newInstance(String message)
+ *
+ * Created by Stefan Beukmann on 24.12.2015.
  */
-public class LoaderFragment extends Fragment {
+public class PreviewLoaderFragment extends Fragment {
     public static final String TEXT_KEY = "TEXT";
+    private final static String TAG = PreviewLoader.class.getSimpleName();
+
     interface TaskCallbacks{
-        void onPrexecute();
+        void onPreExecute();
         void onPostExecute(ArrayList<PreviewText>  texts);
     }
+
     private PreviewLoader mTask;
-    public static LoaderFragment newInstance(String text) {
-        LoaderFragment f = new LoaderFragment();
+    public static PreviewLoaderFragment newInstance(String text) {
+        PreviewLoaderFragment f = new PreviewLoaderFragment();
         Bundle args = new Bundle();
         args.putString(TEXT_KEY, text);
         f.setArguments(args);
@@ -44,11 +51,8 @@ public class LoaderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Retain this fragment across configuration changes.
         setRetainInstance(true);
         String text = getArguments().getString(TEXT_KEY);
-        // Create and execute the background task.
         mTask = new PreviewLoader();
         mTask.execute(text);
     }
@@ -62,7 +66,7 @@ public class LoaderFragment extends Fragment {
     private TaskCallbacks mCallbacks;
     private class PreviewLoader extends AsyncTask<String, Void, ArrayList<PreviewText>> {
 
-        private final String emptyLine = "\n" + String.format("%"+EngelPreview.WIDTH+"s", "");
+        private final String emptyLine = "\n" + TextUtils.padRight("", PreviewActivity.WIDTH);
         private List<PreviewText> readCSV(String path, String csv, String prefix, String text) throws IOException {
             List<PreviewText> previewTexts = new ArrayList<>();
 
@@ -70,10 +74,10 @@ public class LoaderFragment extends Fragment {
 
             String input = IOUtils.toString(in);
             String wrappedText = "";
-            if (prefix.equals(EngelPreview.COWSAY))
-                wrappedText = TextUtils.cowWrap(text, EngelPreview.WIDTH);
-            else if (prefix.equals(EngelPreview.ASCII_ART))
-                wrappedText = TextUtils.wordWrap(text, EngelPreview.WIDTH);
+            if (prefix.equals(PreviewActivity.COWSAY))
+                wrappedText = TextUtils.cowWrap(text, PreviewActivity.WIDTH);
+            else if (prefix.equals(PreviewActivity.ASCII_ART))
+                wrappedText = TextUtils.wordWrap(text, PreviewActivity.WIDTH);
             IOUtils.closeQuietly(in);
             String[] rawCodes = input.split("\n");
             for (String line : rawCodes){
@@ -82,7 +86,7 @@ public class LoaderFragment extends Fragment {
                 if (items.length == 2) {
                     String finalText = "";
                     switch (prefix){
-                        case EngelPreview.ASCII_ART:
+                        case PreviewActivity.ASCII_ART:
                             try {
                                 InputStream is = getActivity().getAssets().open(path + "/" + items[1]);
                                 String asciiArt = IOUtils.toString(is);
@@ -90,20 +94,22 @@ public class LoaderFragment extends Fragment {
                                 finalText = wrappedText + "\n" + asciiArt;
                             }
                             catch (Exception ex){
+                                Log.w(TAG, "Fehler beim Laden des Preview!", ex);
                                 finalText = ex.getMessage();
                             }
                             break;
-                        case EngelPreview.FIGLET:
+                        case PreviewActivity.FIGLET:
                             try {
                                 InputStream is = getActivity().getAssets().open(path + "/" + items[1] + ".flf");
                                 finalText = TextUtils.wordWrap(text, 24, new FigletPrinter(new FigletFont(is)));
                                 IOUtils.closeQuietly(is);
                             }
                             catch (Exception ex){
+                                Log.w(TAG, "Fehler beim Laden des Preview!", ex);
                                 finalText = ex.getMessage();
                             }
                             break;
-                        case EngelPreview.COWSAY:
+                        case PreviewActivity.COWSAY:
                             try {
                                 InputStream is = getActivity().getAssets().open(path + "/" + items[1] + ".say");
                                 String cow = IOUtils.toString(is);
@@ -111,6 +117,7 @@ public class LoaderFragment extends Fragment {
                                 finalText = wrappedText + "\n" + cow;
                             }
                             catch (Exception ex){
+                                Log.w(TAG, "Fehler beim Laden des Preview!", ex);
                                 finalText = ex.getMessage();
                             }
                             break;
@@ -122,6 +129,13 @@ public class LoaderFragment extends Fragment {
             return previewTexts;
 
         }
+
+        @Override
+        protected void onPreExecute() {
+            if (mCallbacks != null)
+                mCallbacks.onPreExecute();
+        }
+
         @Override
         protected ArrayList<PreviewText> doInBackground(String... textArray) {
             ArrayList<PreviewText> texts = new ArrayList<>();

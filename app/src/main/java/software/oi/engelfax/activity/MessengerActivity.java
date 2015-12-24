@@ -15,8 +15,8 @@ import android.widget.ImageButton;
 
 import software.oi.engelfax.R;
 
-public class EngelMessenger extends AppCompatActivity {
-    private static final String TAG = EngelMessenger.class.getSimpleName();
+public class MessengerActivity extends AppCompatActivity {
+    private static final String TAG = MessengerActivity.class.getSimpleName();
     private EditText nachrichtEditText;
     private ImageButton sendButton;
     @Override
@@ -60,7 +60,7 @@ public class EngelMessenger extends AppCompatActivity {
     static final int REQUEST_SMS = 1;
 
     private void startPreview(){
-        Intent intent = new Intent(this, EngelPreview.class);
+        Intent intent = new Intent(this, PreviewActivity.class);
         intent.putExtra(TEXT_KEY, getText());
         startActivityForResult(intent, REQUEST_SMS);
 
