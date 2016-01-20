@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -49,7 +50,6 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
     public final static int WIDTH = 24;
     private Spinner styleChooser;
     private FloatingActionButton fab;
-    private String phoneNumber;
     private final String SMS_SENT = "SMS_SENT";
     private final String SMS_DELIVERED = "SMS_DELIVERED";
     private final String TAG = PreviewActivity.class.getSimpleName();
@@ -74,8 +74,7 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
 
         // get Text
         final String text = getIntent().getStringExtra(MessengerActivity.TEXT_KEY);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        phoneNumber = sharedPref.getString(SettingsActivity.PHONE_NO, "");
+
         sentReceiver = new SmsReceiver();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -208,19 +207,39 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
 
 
     private void sendSms(String text){
-        if (!text.trim().equals("")) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String phoneNumber = sharedPref.getString(SettingsActivity.PHONE_NO, "");
+        if (PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
+            if (!text.trim().equals("")) {
 
-            String prefix = ((PreviewText) styleChooser.getSelectedItem()).code;
-            fab.setEnabled(false);
-            fab.setVisibility(View.INVISIBLE);
-            PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(SMS_SENT), 0);
-            SmsManager smsManager = SmsManager.getDefault();
-            Log.d(TAG, "Text: " + prefix + text + ", Number " + phoneNumber);
-            smsManager.sendTextMessage(phoneNumber, null, prefix + text, sentPendingIntent, null);
+                String prefix = ((PreviewText) styleChooser.getSelectedItem()).code;
+                fab.setEnabled(false);
+                fab.setVisibility(View.INVISIBLE);
+                PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(SMS_SENT), 0);
+                SmsManager smsManager = SmsManager.getDefault();
+                Log.d(TAG, "Text: " + prefix + text + ", Number " + phoneNumber);
+                smsManager.sendTextMessage(phoneNumber, null, prefix + text, sentPendingIntent, null);
+            } else {
+                Snackbar.make(fab, getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
         }
-        else{
-            Snackbar.make(fab, getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+        else {
+            String error;
+            if (phoneNumber == null || "".equals(phoneNumber.toString())) {
+                    error =getString(R.string.error_no_phone_no);
+            }
+            else {
+                error = String.format(getString(R.string.error_phone_no), phoneNumber);
+            }
+            Snackbar.make(fab, error , Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.settings), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(PreviewActivity.this, SettingsActivity.class);
+                            startActivity(intent);
+                        }
+                    }).show();
         }
     }
 

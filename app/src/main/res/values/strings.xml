@@ -12,6 +12,8 @@
     <string name="sent">Nachricht wurde an den Engel gesendet!</string>
     <string name="error_not_delivered">Fehler: Nachricht konnte nicht gesendet werden</string>
     <string name="error_radio_off">Fehler: Flugzeugmodus!</string>
+    <string name="error_phone_no">Fehler: Ungültige Telefonnummer %s!</string>
+    <string name="error_no_phone_no">Fehler: Keine Telefonnummer eingegeben</string>
     <string name="error_no_message">Fehler: Keine Nachricht für Engel eingegeben!</string>
     <string name="error_null_pdu">Fehler: Kein Netz!</string>
     <string name="error_no_service">Fehler: Kein Netz!</string>
