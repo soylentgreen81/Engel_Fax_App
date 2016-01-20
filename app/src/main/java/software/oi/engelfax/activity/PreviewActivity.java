@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -72,7 +74,8 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
 
         // get Text
         final String text = getIntent().getStringExtra(MessengerActivity.TEXT_KEY);
-        phoneNumber = getString(R.string.number);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        phoneNumber = sharedPref.getString(SettingsActivity.PHONE_NO, "");
         sentReceiver = new SmsReceiver();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -211,10 +214,9 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
             fab.setEnabled(false);
             fab.setVisibility(View.INVISIBLE);
             PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(SMS_SENT), 0);
-            PendingIntent deliveredPendintIntent= PendingIntent.getBroadcast(this, 0, new Intent(SMS_DELIVERED),0);
             SmsManager smsManager = SmsManager.getDefault();
             Log.d(TAG, "Text: " + prefix + text + ", Number " + phoneNumber);
-            smsManager.sendTextMessage(phoneNumber, null, prefix + text, sentPendingIntent, deliveredPendintIntent);
+            smsManager.sendTextMessage(phoneNumber, null, prefix + text, sentPendingIntent, null);
         }
         else{
             Snackbar.make(fab, getString(R.string.error_no_message), Snackbar.LENGTH_LONG)

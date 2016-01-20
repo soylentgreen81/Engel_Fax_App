@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
@@ -24,9 +23,10 @@ public class MessengerActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_engel_messenger);
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ab.setTitle(getString(R.string.title));
+        ab.setSubtitle(getString(R.string.sub_title));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         nachrichtEditText = (EditText)  findViewById(R.id.nachrichtEditText);
         sendButton = (ImageButton) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -84,10 +84,16 @@ public class MessengerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_paint: {
                 Intent intent = new Intent(this, PaintActivity.class);
                 startActivity(intent);
                 return true;
+            }
+            case R.id.action_settings: {
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }

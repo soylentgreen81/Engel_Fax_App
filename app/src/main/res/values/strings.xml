@@ -5,7 +5,9 @@
     <string name="paint_title">Mal dem Engel nen Bild!</string>
     <string name="sub_title">Macht sie fettich!</string>
     <string name="hint">Deine Nachricht an den Engel...</string>
-    <string name="number">TODO</string>
+    <string name="number">Telefonnummer</string>
+    <string name="settings">Einstellungen</string>
+    <string name="number_summary">Die Telefonnummer des Engels</string>
     <string name="delivered">Nachricht wurde dem Engel zugestellt</string>
     <string name="sent">Nachricht wurde an den Engel gesendet!</string>
     <string name="error_not_delivered">Fehler: Nachricht konnte nicht gesendet werden</string>
