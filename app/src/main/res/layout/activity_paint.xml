@@ -64,7 +64,15 @@
             android:src="@android:drawable/ic_menu_zoom"
             android:background="@drawable/back_button_selected"
             android:layout_toRightOf="@+id/eraseMode" />
+        <ImageButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
 
+            android:id="@+id/adjustImage"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:background="@drawable/back_button"
+            android:layout_toRightOf="@+id/viewMode" />
         <ImageButton
             android:layout_width="48dp"
             android:layout_height="48dp"

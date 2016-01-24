@@ -9,7 +9,7 @@ import software.oi.engelfax.util.TextUtils;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * Created by stefa_000 on 16.12.2015.
+ * Created by Stefan Beukmann on 16.12.2015.
  */
 
 public class EngelFaxUnitTests extends TestCase {

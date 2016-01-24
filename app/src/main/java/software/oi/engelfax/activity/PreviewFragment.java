@@ -13,7 +13,7 @@ import software.oi.engelfax.PreviewText;
 import software.oi.engelfax.R;
 
 /**
- * Created by stefa_000 on 24.12.2015.
+ * Created by Stefan Beukmann on 24.12.2015.
  */
 public class PreviewFragment extends Fragment {
         /**

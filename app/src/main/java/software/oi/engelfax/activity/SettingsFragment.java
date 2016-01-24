@@ -6,7 +6,7 @@ import android.preference.PreferenceFragment;
 import software.oi.engelfax.R;
 
 /**
- * Created by stefa_000 on 20.01.2016.
+ * Created by Stefan Beukmann on 20.01.2016.
  */
 public  class SettingsFragment extends PreferenceFragment {
     @Override

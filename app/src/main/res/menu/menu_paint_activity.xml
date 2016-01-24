@@ -2,5 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/clearImage" android:title="@string/clear_image"
         android:orderInCategory="100" />
-
+    <item android:id="@+id/loadImage" android:title="@string/load_image"
+        android:orderInCategory="100" />
 </menu>

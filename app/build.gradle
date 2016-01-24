@@ -34,5 +34,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'commons-io:commons-io:2.4'
+    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     androidTestCompile 'junit:junit:4.12'
 }

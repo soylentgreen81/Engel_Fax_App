@@ -29,8 +29,8 @@
         <activity android:name=".activity.PaintActivity" android:screenOrientation="portrait" android:label="@string/paint_title">
 
         </activity>
-        <activity android:name=".activity.SettingsActivity" android:label="@string/settings">
-        </activity>
+        <activity android:name=".activity.SettingsActivity" android:label="@string/settings"/>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
     </application>
 
 </manifest>
