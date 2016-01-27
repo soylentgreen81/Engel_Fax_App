@@ -15,3 +15,7 @@ Offers several means of communication
 For more information on the server side consult:
 
 https://github.com/muellmatto/smsfax
+
+#Prerequisites
+* API-Level 16 (Android 4.1 "Jelly Bean")
+* Permission to send sms
