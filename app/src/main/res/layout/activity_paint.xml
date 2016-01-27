@@ -71,7 +71,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="8dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/sendButton"
             android:src="@android:drawable/ic_menu_send"
             android:background="@drawable/back_button"
