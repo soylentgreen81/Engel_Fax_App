@@ -7,7 +7,7 @@ Android App
 Offers several means of communication
 * sending clear text sms (plain & simple & pretty boring)
 * sending ascii art sms using a prefix. Three flavors available: 
-   * #A + Index -> Ascii Art 
+   * #A + Index -> static Ascii Art 
    * #F + Index -> Figlet Fonts
    * #C + Index -> Cowsay quotes
 * sending "ascii"-bitmaps using base 64 encoded binary data. uses currently 2bits per pixel in a 24x18 bitmap. You can even import and crop your favorite images using a simple brightness check to convert them into an ascii image!
