@@ -4,4 +4,6 @@
         android:orderInCategory="100" />
     <item android:id="@+id/loadImage" android:title="@string/load_image"
         android:orderInCategory="100" />
+    <item android:id="@+id/invertImage" android:title="@string/invert_image"
+        android:orderInCategory="100" />
 </menu>

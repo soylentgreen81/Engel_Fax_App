@@ -24,4 +24,6 @@
     <string name="clear_image">Bild zurücksetzen</string>
     <string name="load_image">Bild laden</string>
     <string name="brightness_threshold">Helligkeit</string>
+    <string name="invert_image">Invertieren</string>
+
 </resources>

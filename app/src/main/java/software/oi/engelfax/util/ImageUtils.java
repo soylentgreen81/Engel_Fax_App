@@ -13,16 +13,7 @@ import java.io.IOException;
  * Created by Stefan Beukmann on 24.01.2016.
  */
 public abstract class ImageUtils {
-    public static String toString(BitSet bits){
-        byte[] result = bits.toByteArray();
-        byte[] reversed = result;
-        for (int i=0;i<result.length;i++) {
 
-            reversed[i] = (byte)(Integer.reverse(result[i]) >>> (Integer.SIZE - Byte.SIZE));
-
-        }
-        return new String(Base64.encode(reversed, Base64.NO_WRAP));
-    }
     public static Bitmap scaleMonochrome(Context context, Uri imagepath, final int width, final int height){
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imagepath);

@@ -22,5 +22,6 @@
     <string name="clear_image">Clear image</string>
     <string name="load_image">Load image</string>
     <string name="brightness_threshold">Brightness threshold</string>
+    <string name="invert_image">Invert image</string>
 
 </resources>
