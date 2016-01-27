@@ -2,7 +2,7 @@
 
 ![Engel Fax](https://github.com/soylentgreen81/Engel_Fax_App/blob/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png)
 
-Android App 
+#Android App 
 
 Offers several means of communication
 * sending clear text sms (plain & simple & pretty boring)
