@@ -14,5 +14,8 @@ deploy:
   api_key:
     secure: QIRdxuuneZl7x0X2maMWRwcIIDS5OVCPf5P6399eZu9hQS/0cPONVEwupDvElXyaPPiIQiBHn6aK6icxoDVkvIyFM6uPlBfbAg5203KwZOT5puXx2RrJG2UnEO+gnjEBGzqzTaC8UZSMKTHfL/Z9ooKQ8VUKtMhqx02TsHjKwF+zoilNiDj9ZTzXorV8KhtJ3wi0DAunEBA4o2RZzlkertCuazbsINM5s/mU5xbRjH1tqDlCGi3JNA4rI7OfyXXmrCjIJoL4Q8aXWCN+GoKOCrOR5Dj/leSxaDMWQCb1nsV1Qu7eoxrPi7bKiFaSy5aMUR5A3udJHxw2B4ZgOHqGGBQfe67WKtdhGMcFvXdutMAQY0ov68xFS3DkDj+PIAD87LiLSt/QBgtJO5OTNaU3k0kiYjC9PY5r6cc69Sf1Nh8MP4wHf+u3XpKa/nLhvIJEpGqq9d2/NyaJ261c53LSz/GXNizSKgZ+kN5kGZat2GCRR8lopkWJaIZgLYjQIWfZSbHa6aJpt4w+mGl1Nj97wFNquu8Cr1qOe9ALoFRHYt2hvmhHJhC0jJP62ikBJtSFImCi2zHzmrMGsjxqw3y5WI5CkLFyE0ud0OzlgIZRkPapFO/RVEWZOi/9ifpFmivsFA8fNrLAsk/Hss98+IVIcZG2ilb43XWb4O2/bXhcCto=
   file: app/build/outputs/apk/app-release.apk
+  skip_cleanup: true
   on:
     repo: soylentgreen81/Engel_Fax_App
+    tags: true
+  
