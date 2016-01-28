@@ -91,7 +91,7 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
             // If the Fragment is non-null, then it is currently being
             // retained across a configuration change.
             if (previewLoaderFragment == null) {
-                previewLoaderFragment = new PreviewLoaderFragment().newInstance(text);
+                previewLoaderFragment = PreviewLoaderFragment.newInstance(text);
                 fm.beginTransaction().add(previewLoaderFragment, TAG_LOADER_FRAGMENT).commit();
             }
         }
@@ -272,6 +272,6 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
             fab.setVisibility(View.VISIBLE);
 
         }
-    };
+    }
 
 }

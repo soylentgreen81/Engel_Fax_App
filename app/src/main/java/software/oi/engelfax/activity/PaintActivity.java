@@ -55,8 +55,8 @@ public class PaintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paint);
         if (savedInstanceState != null){
-            asciiBitmap = (AsciiBitmap) savedInstanceState.getParcelable(ASCII_IMAGE_KEY);
-            sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_IMAGE);
+            asciiBitmap =  savedInstanceState.getParcelable(ASCII_IMAGE_KEY);
+            sourceImage =  savedInstanceState.getParcelable(SOURCE_IMAGE);
             brightnessThreshold = savedInstanceState.getInt(BRIGHTNESS_THRESHOLD);
         }
         else {
