@@ -1,9 +1,10 @@
-![Build status](https://travis-ci.org/soylentgreen81/Engel_Fax_App.svg?branch=master)
 # Engel Fax
+![Build status](https://travis-ci.org/soylentgreen81/Engel_Fax_App.svg?branch=master)
+
 
 ![Engel Fax](https://github.com/soylentgreen81/Engel_Fax_App/blob/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png)
 
-#Android App 
+## Android App 
 
 Offers several means of communication
 * sending clear text sms (plain & simple & pretty boring)
@@ -17,6 +18,6 @@ For more information on the server side consult:
 
 https://github.com/muellmatto/smsfax
 
-#Prerequisites
+## Prerequisites
 * API-Level 16 (Android 4.1 "Jelly Bean")
 * Permission to send sms
