@@ -25,5 +25,15 @@
     <string name="load_image">Bild laden</string>
     <string name="brightness_threshold">Helligkeit</string>
     <string name="invert_image">Invertieren</string>
+    <string name="canceled">Abgebrochen</string>
+    <string name="scan_qr">Scan den Engel!</string>
+    <string name="number_saved">Neue Engelnummer gespeichert</string>
+    <string name="error_number_save">Fehler beim speichern der Engelnummer</string>
+
+    <string name="crop__saving">Bild speichern…</string>
+    <string name="crop__wait">Bitte warten…</string>
+    <string name="crop__pick_error">Keine Bildquellen verfügbar</string>
+    <string name="crop__done">Übernehmen</string>
+    <string name="crop__cancel">Abbrechen</string>
 
 </resources>

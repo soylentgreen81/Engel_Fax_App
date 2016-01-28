@@ -6,9 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -30,6 +28,7 @@ import java.util.List;
 
 import software.oi.engelfax.PreviewText;
 import software.oi.engelfax.R;
+import software.oi.engelfax.util.Preferences;
 
 public class PreviewActivity extends AppCompatActivity implements  PreviewLoaderFragment.TaskCallbacks {
 
@@ -205,8 +204,7 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
 
 
     private void sendSms(String text){
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String phoneNumber = sharedPref.getString(SettingsActivity.PHONE_NO, "");
+        String phoneNumber = Preferences.getNumber(this);
         if (PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
             if (!text.trim().equals("")) {
 

@@ -48,7 +48,5 @@ public class EngelFaxUnitTests extends TestCase {
         String expected = "a\n\nb";
         String result = TextUtils.wordWrap(input, 1);
         assertEquals(expected, result);
-
-
     }
 }

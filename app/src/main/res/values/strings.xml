@@ -23,5 +23,15 @@
     <string name="load_image">Load image</string>
     <string name="brightness_threshold">Brightness threshold</string>
     <string name="invert_image">Invert image</string>
+    <string name="scan_qr">Scan QR</string>
+    <string name="crop__saving">Save Image…</string>
+    <string name="crop__wait">Please Wait…</string>
+    <string name="crop__pick_error">No sources available</string>
+    <string name="crop__done">Done</string>
+    <string name="crop__cancel">Cancel</string>
+    <string name="canceled">Canceled</string>
+    <string name="number_saved">New number saved</string>
+    <string name="error_number_save">Error saving new number</string>
+
 
 </resources>
