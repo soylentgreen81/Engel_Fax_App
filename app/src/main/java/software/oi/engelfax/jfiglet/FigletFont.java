@@ -1,7 +1,10 @@
 package software.oi.engelfax.jfiglet;
-import java.util.*;
-import java.net.*;
-import java.io.*;
+
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.StringTokenizer;
 
 /**
  * FigletFont implementation. A single static method call will create the ascii

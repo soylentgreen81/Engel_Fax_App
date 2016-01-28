@@ -1,32 +1,21 @@
 package software.oi.engelfax.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,9 +25,7 @@ import java.io.File;
 
 import software.oi.engelfax.AsciiBitmap;
 import software.oi.engelfax.R;
-import software.oi.engelfax.util.BitSet;
 import software.oi.engelfax.util.ImageUtils;
-import software.oi.engelfax.util.TextUtils;
 
 /**
  * Shows the Paintcanvas and a menu which allows importing Images

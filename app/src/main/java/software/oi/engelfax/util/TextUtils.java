@@ -1,9 +1,5 @@
 package software.oi.engelfax.util;
 
-import org.apache.commons.io.IOUtils;
-
-import java.util.Map;
-
 /**
  * Created by stefa_000 on 16.12.2015.
  */

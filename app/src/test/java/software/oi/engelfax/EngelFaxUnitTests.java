@@ -2,11 +2,7 @@ package software.oi.engelfax;
 
 import junit.framework.TestCase;
 
-import org.junit.Test;
-
 import software.oi.engelfax.util.TextUtils;
-
-import static junit.framework.Assert.assertEquals;
 
 /**
  * Created by Stefan Beukmann on 16.12.2015.
