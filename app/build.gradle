@@ -28,6 +28,11 @@ android {
     lintOptions {
       abortOnError false
     }
+    testOptions { 
+        unitTests.all {
+           jvmArgs '-XX:MaxPermSize=256m'
+        }
+    }
 
 }
 
