@@ -1,3 +1,4 @@
+https://travis-ci.org/soylentgreen81/Engel_Fax_App.svg?branch=master
 # Engel Fax
 
 ![Engel Fax](https://github.com/soylentgreen81/Engel_Fax_App/blob/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png)
