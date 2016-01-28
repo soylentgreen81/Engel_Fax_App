@@ -21,10 +21,6 @@ android {
         exclude 'META-INF/LICENSE.txt'
     }
 
-    sourceSets {
-        androidTest.setRoot( 'src/test' )
-
-    }
     lintOptions {
       abortOnError false
     }
