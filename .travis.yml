@@ -17,5 +17,5 @@ deploy:
   skip_cleanup: true
   on:
     repo: soylentgreen81/Engel_Fax_App
-    #tags: true
+    tags: true
   
