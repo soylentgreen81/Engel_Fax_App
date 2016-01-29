@@ -10,7 +10,7 @@ before_install:
 script:
 - ./gradlew build assembleRelease
 before_deploy:
-  - cp ./app/build/outputs/apk/app-release-unsigned.apk ./EngelFax.apk
+  - cp ./app/build/outputs/apk/app-release.apk ./EngelFax.apk
 deploy:
   provider: releases
   api_key:
