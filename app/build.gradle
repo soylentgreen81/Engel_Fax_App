@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
+            storeFile file("../release.keystore.jks")
             storePassword System.getenv("ENGEL_KSTOREPWD")
             keyAlias System.getenv("ENGEL_KSTOREALIAS")
             keyPassword System.getenv("ENGEL_KEYPWD")
