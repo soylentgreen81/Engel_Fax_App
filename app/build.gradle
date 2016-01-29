@@ -1,9 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            storePassword System.getenv("ENGEL_KSTOREPWD")
+            keyAlias System.getenv("ENGEL_KSTOREALIAS")
+            keyPassword System.getenv("ENGEL_KEYPWD")
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-
     defaultConfig {
         applicationId "software.oi.engelfax"
         minSdkVersion 16
@@ -20,16 +26,14 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
     }
-
     lintOptions {
-      abortOnError false
+        abortOnError false
     }
-    testOptions { 
+    testOptions {
         unitTests.all {
-           jvmArgs '-XX:MaxPermSize=256m'
+            jvmArgs '-XX:MaxPermSize=256m'
         }
     }
-
 }
 
 dependencies {
