@@ -10,7 +10,7 @@ before_install:
 script:
 - ./gradlew build
 before_deploy: 
-- cp app/build/outputs/apk/app-release.apk app-release.apk 
+- cp /home/travis/build/soylentgreen81/Engel_Fax_App/app/build/outputs/apk/app-release.apk app-release.apk 
 deploy:
   provider: releases
   api_key:
