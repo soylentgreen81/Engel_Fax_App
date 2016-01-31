@@ -1,9 +1,7 @@
 package software.oi.engelfax.activity;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -15,9 +13,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,9 +23,11 @@ import java.util.List;
 
 import software.oi.engelfax.PreviewText;
 import software.oi.engelfax.R;
-import software.oi.engelfax.util.Preferences;
+import software.oi.engelfax.components.SmsBroadcastReceiver;
+import software.oi.engelfax.util.GsmUtils;
+import software.oi.engelfax.util.PhoneNumberException;
 
-public class PreviewActivity extends AppCompatActivity implements  PreviewLoaderFragment.TaskCallbacks {
+public final class PreviewActivity extends AppCompatActivity implements  PreviewLoaderFragment.TaskCallbacks, SmsBroadcastReceiver.SmsSentCallback {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -47,13 +44,12 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
     public final static int WIDTH = 24;
     private Spinner styleChooser;
     private FloatingActionButton fab;
-    private final String SMS_SENT = "SMS_SENT";
-    private final String SMS_DELIVERED = "SMS_DELIVERED";
     private final String TAG = PreviewActivity.class.getSimpleName();
     private ArrayList<PreviewText> previews;
     private BroadcastReceiver sentReceiver;
     private static final String TAG_LOADER_FRAGMENT = "loader_fragment";
-
+    private static final String PREVIEW_POSITION= "PREVIEW_POSITION";
+    private static final String PREVIEWS = "PREVIEWS";
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -72,7 +68,7 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
         // get Text
         final String text = getIntent().getStringExtra(MessengerActivity.TEXT_KEY);
 
-        sentReceiver = new SmsReceiver();
+        sentReceiver = new SmsBroadcastReceiver(this);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         //If screen is rotated, restore previewImages and jump to current position
@@ -131,10 +127,10 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
 
 
     }
+    @Override
     public void onStart(){
         super.onStart();
-        registerReceiver(sentReceiver, new IntentFilter(SMS_SENT));
-
+        registerReceiver(sentReceiver, new IntentFilter(GsmUtils.SMS_SENT));
     }
     @Override
     public void onPause() {
@@ -144,12 +140,11 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
     private void showPreviews(){
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), previews);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        ArrayAdapter<PreviewText> styleAdapter = new ArrayAdapter<PreviewText>(PreviewActivity.this,android.R.layout.simple_spinner_dropdown_item, previews);
+        ArrayAdapter<PreviewText> styleAdapter = new ArrayAdapter<>(PreviewActivity.this,android.R.layout.simple_spinner_dropdown_item, previews);
         styleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         styleChooser.setAdapter(styleAdapter);
     }
-    public static final String PREVIEW_POSITION= "PREVIEW_POSITION";
-    public static final String PREVIEWS = "PREVIEWS";
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -170,13 +165,30 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
         showPreviews();
     }
 
+    @Override
+    public void onSmsSentSuccess() {
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onSmsSentError(String message) {
+        if (message != null)
+
+            Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        fab.setEnabled(true);
+        fab.setVisibility(View.VISIBLE);
+
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private List<PreviewText> texts;
+        private final List<PreviewText> texts;
         public SectionsPagerAdapter(FragmentManager fm, List<PreviewText> texts) {
             super(fm);
             this.texts = texts;
@@ -202,74 +214,36 @@ public class PreviewActivity extends AppCompatActivity implements  PreviewLoader
         }
     }
 
-
     private void sendSms(String text){
-        String phoneNumber = Preferences.getNumber(this);
-        if (PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
-            if (!text.trim().equals("")) {
-
-                String prefix = ((PreviewText) styleChooser.getSelectedItem()).code;
-                fab.setEnabled(false);
-                fab.setVisibility(View.INVISIBLE);
-                PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(SMS_SENT), 0);
-                SmsManager smsManager = SmsManager.getDefault();
-                Log.d(TAG, "Text: " + prefix + text + ", Number " + phoneNumber);
-                smsManager.sendTextMessage(phoneNumber, null, prefix + text, sentPendingIntent, null);
-            } else {
-                Snackbar.make(fab, getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        text = text == null ? "" : text.trim();
+        String prefix = ((PreviewText) styleChooser.getSelectedItem()).code;
+        text+=prefix;
+        if (!"".equals(text)){
+            fab.setEnabled(false);
+            fab.setVisibility(View.INVISIBLE);
+            try {
+                GsmUtils.sendSms(this, text);
             }
-        }
-        else {
-            String error;
-            if (phoneNumber == null || "".equals(phoneNumber.toString())) {
-                    error =getString(R.string.error_no_phone_no);
+            catch (PhoneNumberException ex){
+                Snackbar.make(fab, ex.getMessage(), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.settings), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(PreviewActivity.this, SettingsActivity.class);
+                                startActivity(intent);
+                            }
+                        }).show();
             }
-            else {
-                error = String.format(getString(R.string.error_phone_no), phoneNumber);
-            }
-            Snackbar.make(fab, error , Snackbar.LENGTH_LONG)
-                    .setAction(getString(R.string.settings), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(PreviewActivity.this, SettingsActivity.class);
-                            startActivity(intent);
-                        }
-                    }).show();
-        }
-    }
-
-
-    private class SmsReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String message = null;
-            switch (getResultCode()) {
-                case Activity.RESULT_OK:
-                    PreviewActivity.this.setResult(Activity.RESULT_OK);
-                    PreviewActivity.this.finish();
-                    break;
-                case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                    message =  getString(R.string.error_generic);
-                    break;
-                case SmsManager.RESULT_ERROR_NO_SERVICE:
-                    message = getString(R.string.error_no_service);
-                    break;
-                case SmsManager.RESULT_ERROR_NULL_PDU:
-                    message =  getString(R.string.error_null_pdu);
-                    break;
-                case SmsManager.RESULT_ERROR_RADIO_OFF:
-                    message =  getString(R.string.error_radio_off);
-                    break;
-            }
-            if (message != null)
-
-                Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        }else {
+            Snackbar.make(fab, getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
             fab.setEnabled(true);
             fab.setVisibility(View.VISIBLE);
-
         }
     }
+
+
+
+
 
 }

@@ -5,7 +5,7 @@
 <RelativeLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:showIn="@layout/activity_engel_messenger" tools:context=".EngelMessenger">
 
 
@@ -41,6 +41,7 @@
         android:src="@android:drawable/ic_menu_view"
         android:background="@drawable/back_button"
         android:layout_alignBottom="@+id/nachrichtEditText"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/send"/>
 </RelativeLayout>
 </ScrollView>

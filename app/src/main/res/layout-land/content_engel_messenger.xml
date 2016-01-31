@@ -39,6 +39,7 @@
         android:src="@android:drawable/ic_menu_view"
         android:background="@drawable/back_button"
         android:layout_alignBottom="@+id/nachrichtEditText"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/send"/>
 
 </RelativeLayout>

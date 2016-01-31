@@ -8,7 +8,7 @@ public abstract class TextUtils {
         return wordWrap(input, lineWidth, new SimplePrinter());
     }
     public static String cowWrap(String input, final int lineWidth){
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         final int realWidth = lineWidth - 2;
         String wrapped = wordWrap(input, realWidth);
         String[] lines = wrapped.split("\n");
@@ -52,7 +52,6 @@ public abstract class TextUtils {
 
     public static String wordWrap(String input, final int lineWidth, TextPrinter printer){
         String[] lines = input.replace("\r\n", "\n").replace("\r", "\n").split("\n");
-        StringBuffer result = new StringBuffer();
         for (int l = 0;l<lines.length;l++){
             String line = lines[l];
             String[] words = line.split("[ \t]");

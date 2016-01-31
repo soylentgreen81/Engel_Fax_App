@@ -18,7 +18,7 @@ public class PreviewText implements Parcelable {
     public final String title;
     public final String code;
 
-    protected PreviewText(Parcel in) {
+    private PreviewText(Parcel in) {
         String[] values = new String[3];
         in.readStringArray(values);
         title = values[0];

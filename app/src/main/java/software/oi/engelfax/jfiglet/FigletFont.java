@@ -1,9 +1,9 @@
 package software.oi.engelfax.jfiglet;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 /**
@@ -24,14 +24,14 @@ import java.util.StringTokenizer;
  *
  */
 public class FigletFont {
-  public char hardblank;
-  public int height = -1;
-  public int heightWithoutDescenders = -1;
-  public int maxLine = -1;
-  public int smushMode = -1;
-  public char font[][][] = null;
-  public String fontName = null;
-  final public static int MAX_CHARS = 1024;
+    private char hardblank;
+    public final int height;
+    private int heightWithoutDescenders = -1;
+    private int maxLine = -1;
+    private int smushMode = -1;
+    private char font[][][] = null;
+    private String fontName = null;
+    final public static int MAX_CHARS = 1024;
 
    /**
      * Returns all character from this Font. Each character is defined as
@@ -80,15 +80,14 @@ public class FigletFont {
      */
   public FigletFont(InputStream stream) throws IOException {
     font = new char[MAX_CHARS][][];
-    DataInputStream data = null;
+    BufferedReader data = null;
     String dummyS;
-    char dummyC;
     int dummyI;
     int charCode;
 
     String codeTag;
     try {
-      data = new DataInputStream(new BufferedInputStream(stream));
+      data = new BufferedReader(new InputStreamReader(stream));
 
       dummyS = data.readLine();
       StringTokenizer st = new StringTokenizer(dummyS, " ");
@@ -159,16 +158,16 @@ public class FigletFont {
   }
 
 
-    public String convert(String message, final int maxWidth) throws IOException {
+    public String convert(String message, final int maxWidth){
         String[] lines = message.replace("\r\n", "\n").replace("\r", "\n").split("\n");
-        StringBuffer buffer = new StringBuffer();
-        StringBuffer[] lineBuffers = new StringBuffer[this.height];
+        StringBuilder buffer = new StringBuilder();
+        StringBuilder[] lineBuffers = new StringBuilder[this.height];
         for (int i=0;i<this.height;i++){
-            lineBuffers[i] = new StringBuffer();
+            lineBuffers[i] = new StringBuilder();
         }
         for (String line : lines) {
             int count = 0;
-            for (StringBuffer lineBuffer : lineBuffers){
+            for (StringBuilder lineBuffer : lineBuffers){
                 lineBuffer.setLength(0);
             }
             for (int c = 0; c < line.length(); c++){
@@ -179,7 +178,7 @@ public class FigletFont {
 
                     if (count + width > maxWidth) {
 
-                        for (StringBuffer lineBuffer : lineBuffers) {
+                        for (StringBuilder lineBuffer : lineBuffers) {
                             lineBuffer.append("\n");
                             buffer.append(lineBuffer.toString());
                             lineBuffer.setLength(0);
@@ -195,7 +194,7 @@ public class FigletFont {
 
 
 
-            for (StringBuffer lineBuffer : lineBuffers){
+            for (StringBuilder lineBuffer : lineBuffers){
                 lineBuffer.append("\n");
                 buffer.append(lineBuffer.toString());
             }

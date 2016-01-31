@@ -1,9 +1,9 @@
 package software.oi.engelfax.util;
 
 /**
- * Created by stefa_000 on 17.12.2015.
+ * Created by Stefan Beukmann on 17.12.2015.
  */
-public interface TextPrinter {
+interface TextPrinter {
     void print(String word);
     void print(char c);
     void printBreak();

@@ -25,7 +25,7 @@ import software.oi.engelfax.util.TextUtils;
  * Created by Stefan Beukmann on 24.12.2015.
  */
 public class PreviewLoaderFragment extends Fragment {
-    public static final String TEXT_KEY = "TEXT";
+    private static final String TEXT_KEY = "TEXT";
     private final static String TAG = PreviewLoader.class.getSimpleName();
 
     interface TaskCallbacks{
@@ -147,7 +147,7 @@ public class PreviewLoaderFragment extends Fragment {
                 texts.addAll(readCSV("cowsay", "cowsay.csv", "C", text));
             }
             catch (Exception ex){
-
+                Log.w(TAG, ex.getMessage(), ex);
             }
             return texts;
 

@@ -44,7 +44,7 @@ public class AsciiBitmap implements Parcelable{
         bits = BitSet.valueOf(bytes);
     }
     private void buildMaps(){
-        charMap = new HashMap<BitSet, Character>(alphabet.length);
+        charMap = new HashMap<>(alphabet.length);
         inverseCharMap = new HashMap<>(alphabet.length);
         for (int i=0;i<alphabet.length;i++){
             BitSet set = toBitSet(i, bitdepth);

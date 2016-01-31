@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Engel Fax</string>
-    <string name="action_settings">Ascii Art Preview</string>
     <string name="title">Nachricht an den Engel</string>
     <string name="paint_title">Mal dem Engel nen Bild!</string>
     <string name="sub_title">Macht sie fettich!</string>
@@ -9,9 +8,7 @@
     <string name="number">Telefonnummer</string>
     <string name="settings">Einstellungen</string>
     <string name="number_summary">Die Telefonnummer des Engels</string>
-    <string name="delivered">Nachricht wurde dem Engel zugestellt</string>
     <string name="sent">Nachricht wurde an den Engel gesendet!</string>
-    <string name="error_not_delivered">Fehler: Nachricht konnte nicht gesendet werden</string>
     <string name="error_radio_off">Fehler: Flugzeugmodus!</string>
     <string name="error_phone_no">Fehler: Ungültige Telefonnummer %s!</string>
     <string name="error_no_phone_no">Fehler: Keine Telefonnummer eingegeben</string>
@@ -20,7 +17,6 @@
     <string name="error_no_service">Fehler: Kein Netz!</string>
     <string name="error_generic">Fehler: Allgemeiner Fehler!</string>
     <string name="title_activity_engel_preview">EngelPreview</string>
-    <string name="section_format">Hello World from section: %1$d</string>
     <string name="clear_image">Bild zurücksetzen</string>
     <string name="load_image">Bild laden</string>
     <string name="brightness_threshold">Helligkeit</string>
@@ -35,5 +31,8 @@
     <string name="crop__pick_error">Keine Bildquellen verfügbar</string>
     <string name="crop__done">Übernehmen</string>
     <string name="crop__cancel">Abbrechen</string>
+    <string name="send">Senden</string>
+    <string name="erase">Löschen</string>
+    <string name="adjust">Anpassen</string>
 
 </resources>

@@ -2,11 +2,13 @@ package software.oi.engelfax.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -25,15 +27,21 @@ import java.io.File;
 
 import software.oi.engelfax.AsciiBitmap;
 import software.oi.engelfax.R;
+import software.oi.engelfax.components.SmsBroadcastReceiver;
+import software.oi.engelfax.util.GsmUtils;
 import software.oi.engelfax.util.ImageUtils;
+import software.oi.engelfax.util.PhoneNumberException;
 
 /**
  * Shows the Paintcanvas and a menu which allows importing Images
  * @author Stefan Beukmann
  */
-public class PaintActivity extends AppCompatActivity {
+public final class PaintActivity extends AppCompatActivity implements SmsBroadcastReceiver.SmsSentCallback{
     private TextView paintView;
     private ImageButton adjustButton;
+    private ImageButton sendButton;
+    private ImageButton eraseModeButton;
+    private Button drawButton;
     private static final String ASCII_IMAGE_KEY = "ASCII_IMAGE";
     private static final String  BRIGHTNESS_THRESHOLD ="BRIGHTNESS_THRESHOLD";
     private static final String SOURCE_IMAGE = "SOURCE_IMAGE";
@@ -49,7 +57,8 @@ public class PaintActivity extends AppCompatActivity {
     private int selectedModeId;
     private final char[] alphabet = new char[]{' ','.','+','#'};
     private int currentChar = 1;
-    private char FREE = ' ';
+    private final char FREE = ' ';
+    private SmsBroadcastReceiver sentReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,11 +94,13 @@ public class PaintActivity extends AppCompatActivity {
               modeSwitch(v);
             }
         };
-        Button drawButton = (Button) findViewById(R.id.drawMode);
+        drawButton = (Button) findViewById(R.id.drawMode);
         drawButton.setOnClickListener(modeSelectListener);
         drawButton.setText(alphabet[currentChar] + "");
-        findViewById(R.id.eraseMode).setOnClickListener(modeSelectListener);
-        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+        eraseModeButton = (ImageButton) findViewById(R.id.eraseMode);
+        eraseModeButton.setOnClickListener(modeSelectListener);
+        sendButton = (ImageButton) findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 send();
@@ -103,8 +114,18 @@ public class PaintActivity extends AppCompatActivity {
             }
         });
         adjustButton.setVisibility(View.INVISIBLE);
+        sentReceiver = new SmsBroadcastReceiver(this);
     }
-
+    @Override
+    public void onStart(){
+        super.onStart();
+        registerReceiver(sentReceiver, new IntentFilter(GsmUtils.SMS_SENT));
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(sentReceiver);
+    }
     private boolean draw(View v, MotionEvent event) {
         if (event.getPointerCount() == 1) {
             for (int i = 0; i < event.getHistorySize(); i++) {
@@ -139,12 +160,7 @@ public class PaintActivity extends AppCompatActivity {
         selectedModeId = v.getId();
     }
 
-    private void send(){
-        String message = "#P" + asciiBitmap.getAlphabet() + asciiBitmap.toBase64();
-        Intent intent = new Intent(PaintActivity.this, PreviewActivity.class);
-        intent.putExtra(MessengerActivity.TEXT_KEY, message);
-        startActivity(intent);
-    }
+
 
     private void showAdjustDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -160,9 +176,10 @@ public class PaintActivity extends AppCompatActivity {
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    brightnessThreshold = progress;
-                    previewBitmap();
+                brightnessThreshold = progress;
+                previewBitmap();
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
@@ -236,6 +253,40 @@ public class PaintActivity extends AppCompatActivity {
             asciiBitmap.loadBitmap(sourceImage, brightnessThreshold);
             showPreview();
         }
+    }
+    private void send(){
+        sendButton.setEnabled(false);
+        sendButton.setVisibility(View.INVISIBLE);
+        String message = "#P" + asciiBitmap.getAlphabet() + asciiBitmap.toBase64();
+        try {
+            GsmUtils.sendSms(this, message);
+        }
+        catch (PhoneNumberException ex){
+            Snackbar.make(sendButton, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.settings), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(PaintActivity.this, SettingsActivity.class);
+                            startActivity(intent);
+                        }
+                    }).show();
+            sendButton.setEnabled(true);
+            sendButton.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+    @Override
+    public void onSmsSentSuccess() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onSmsSentError(String message) {
+        Snackbar.make(sendButton, message, Snackbar.LENGTH_LONG).show();
+        sendButton.setEnabled(true);
+        sendButton.setVisibility(View.VISIBLE);
     }
 
     private class LoadImage extends AsyncTask<Uri, Void, Bitmap>{

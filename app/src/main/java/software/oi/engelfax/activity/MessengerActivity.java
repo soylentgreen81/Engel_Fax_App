@@ -22,16 +22,19 @@ public class MessengerActivity extends AppCompatActivity {
     private static final String TAG = MessengerActivity.class.getSimpleName();
     private EditText nachrichtEditText;
     private ImageButton sendButton;
-    public final String MAGIC_WORD = "ENGELPOWER";
+    public static final String MAGIC_WORD = "ENGELPOWER";
+    private static final int REQUEST_SMS = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_engel_messenger);
         android.support.v7.app.ActionBar ab = getSupportActionBar();
-        ab.setTitle(getString(R.string.title));
-        ab.setSubtitle(getString(R.string.sub_title));
-
+        if (ab != null) {
+            ab.setTitle(getString(R.string.title));
+            ab.setSubtitle(getString(R.string.sub_title));
+        }
         nachrichtEditText = (EditText)  findViewById(R.id.nachrichtEditText);
         sendButton = (ImageButton) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +65,6 @@ public class MessengerActivity extends AppCompatActivity {
         return nachrichtEditText.getText().toString();
     }
 
-    static final int REQUEST_SMS = 1;
 
     private void startPreview(){
         Intent intent = new Intent(this, PreviewActivity.class);
@@ -113,7 +115,7 @@ public class MessengerActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_paint: {
                 Intent intent = new Intent(this, PaintActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_SMS);
                 return true;
             }
             case R.id.action_settings: {

@@ -27,7 +27,7 @@
             android:padding="0dp"
             android:background="#000"
             android:textColor="#fff"
-            android:textSize="18dp"
+            android:textSize="18sp"
 
             android:layout_gravity="center"
             />
@@ -44,7 +44,6 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/drawMode"
-            android:text="#"
             android:textColor="#fff"
             android:background="@drawable/back_button_selected"
       />
@@ -52,7 +51,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="8dp"
-
+            android:contentDescription="@string/erase"
             android:id="@+id/eraseMode"
             android:src="@android:drawable/ic_menu_delete"
             android:background="@drawable/back_button"
@@ -62,10 +61,10 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="8dp"
-
             android:id="@+id/adjustImage"
             android:src="@android:drawable/ic_menu_preferences"
             android:background="@drawable/back_button"
+            android:contentDescription="@string/adjust"
             android:layout_toRightOf="@+id/eraseMode" />
         <ImageButton
             android:layout_width="48dp"
@@ -73,6 +72,7 @@
             android:layout_marginLeft="8dp"
             android:visibility="visible"
             android:id="@+id/sendButton"
+            android:contentDescription="@string/send"
             android:src="@android:drawable/ic_menu_send"
             android:background="@drawable/back_button"
             android:layout_alignParentEnd="true" />

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Engel Fax</string>
-    <string name="action_settings">Ascii Art Preview</string>
     <string name="title">Message to an angel</string>
     <string name="paint_title">Draw a nice picture!</string>
     <string name="sub_title">Nice!</string>
@@ -8,9 +7,7 @@
     <string name="number">Phone no.</string>
     <string name="settings">Settings</string>
     <string name="number_summary">The angel\'s phone no</string>
-    <string name="delivered">Message was delivered</string>
     <string name="sent">Message was sent!</string>
-    <string name="error_not_delivered">Error: Message could not be delivered</string>
     <string name="error_radio_off">Error: radio is off!</string>
     <string name="error_phone_no">Error: invalid phone no %s!</string>
     <string name="error_no_phone_no">Error: no phone no entered</string>
@@ -32,6 +29,9 @@
     <string name="canceled">Canceled</string>
     <string name="number_saved">New number saved</string>
     <string name="error_number_save">Error saving new number</string>
+    <string name="send">Send</string>
+    <string name="erase">Erase</string>
+    <string name="adjust">Adjust</string>
 
 
 </resources>
