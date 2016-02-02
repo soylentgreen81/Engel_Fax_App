@@ -21,8 +21,9 @@ Offers several means of communication
 * sending "ascii"-bitmaps using base 64 encoded binary data. uses currently 2bits per pixel in a 24x18 bitmap. You can even import and crop your favorite images using a simple brightness check to convert them into an ascii image!
 
 For more information on the server side consult:
-
 https://github.com/muellmatto/smsfax
+
+For more information on the message format check the [Wiki](https://github.com/soylentgreen81/Engel_Fax_App/wiki)
 
 ## Prerequisites
 * API-Level 16 (Android 4.1 "Jelly Bean")
