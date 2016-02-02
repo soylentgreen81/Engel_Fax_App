@@ -4,7 +4,13 @@
 
 ![Engel Fax](https://github.com/soylentgreen81/Engel_Fax_App/blob/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png)
 
-## Android App 
+
+# Table of Contents
+1. [About](#about)
+2. [Prerequisites](#prerequisites)
+3. [How to get it](#how-to-get-it)
+
+## About
 
 Offers several means of communication
 * sending clear text sms (plain & simple & pretty boring)
@@ -21,3 +27,9 @@ https://github.com/muellmatto/smsfax
 ## Prerequisites
 * API-Level 16 (Android 4.1 "Jelly Bean")
 * Permission to send sms
+* Camera Permission
+ 
+
+## How to get it
+* Check if you can install APKs from Unknown Sources (Settings -> Security -> Unknown Sources) [via](http://developer.android.com/distribute/tools/open-distribution.html)
+* Download the APK from the [Latest Releases](https://github.com/soylentgreen81/Engel_Fax_App/releases/latest) and install it
