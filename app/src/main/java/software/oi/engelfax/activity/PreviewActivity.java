@@ -2,6 +2,7 @@ package software.oi.engelfax.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -50,6 +51,8 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
     private static final String TAG_LOADER_FRAGMENT = "loader_fragment";
     private static final String PREVIEW_POSITION= "PREVIEW_POSITION";
     private static final String PREVIEWS = "PREVIEWS";
+    private static final String TEXT_KEY = "TEXT";
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -66,7 +69,7 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
         setSupportActionBar(toolbar);
 
         // get Text
-        final String text = getIntent().getStringExtra(MessengerActivity.TEXT_KEY);
+        final String text = getIntent().getStringExtra(TEXT_KEY);
 
         sentReceiver = new SmsBroadcastReceiver(this);
         // Set up the ViewPager with the sections adapter.
@@ -217,7 +220,7 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
     private void sendSms(String text){
         text = text == null ? "" : text.trim();
         String prefix = ((PreviewText) styleChooser.getSelectedItem()).code;
-        text+=prefix;
+        text = prefix + text;
         if (!"".equals(text)){
             fab.setEnabled(false);
             fab.setVisibility(View.INVISIBLE);
@@ -242,7 +245,11 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
         }
     }
 
-
+    public static Intent makeIntent(Context context, String text){
+        Intent intent = new Intent(context, PreviewActivity.class);
+        intent.putExtra(TEXT_KEY, text);
+        return intent;
+    }
 
 
 

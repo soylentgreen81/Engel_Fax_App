@@ -1,12 +1,16 @@
 package software.oi.engelfax;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
- * Created by stefa_000 on 27.01.2016.
+ * Created by Stefan Beukmann on 27.01.2016.
  */
-public class AsciiBitmapTests extends TestCase {
+public class AsciiBitmapTests  {
 
+    @Test
     public void test1BitDraw() throws Exception {
         AsciiBitmap bitMap = new AsciiBitmap.Builder()
                                     .setHeight(2)
@@ -17,6 +21,7 @@ public class AsciiBitmapTests extends TestCase {
         bitMap.drawChar(1,1,'#');
         assertEquals("# \n #", bitMap.toString());
     }
+    @Test
     public void testInvert1BitDraw() throws Exception {
         AsciiBitmap bitMap = new AsciiBitmap.Builder()
                 .setHeight(2)
@@ -28,6 +33,7 @@ public class AsciiBitmapTests extends TestCase {
         bitMap.invert();
         assertEquals(" #\n# ", bitMap.toString());
     }
+    @Test
     public void test2BitDraw() throws Exception {
         AsciiBitmap bitMap =  new AsciiBitmap.Builder()
                 .setHeight(1)
@@ -41,6 +47,7 @@ public class AsciiBitmapTests extends TestCase {
         bitMap.drawChar(3, 0, '#');
         assertEquals(" .+#", bitMap.toString());
     }
+    @Test
     public void testInvert2Bit() throws Exception {
         AsciiBitmap bitMap =  new AsciiBitmap.Builder()
                 .setHeight(1)
@@ -55,6 +62,7 @@ public class AsciiBitmapTests extends TestCase {
         bitMap.invert();
         assertEquals("#+. ", bitMap.toString());
     }
+    @Test
     public void testIncompleteAlphabet() throws Exception {
         AsciiBitmap bitMap =  new AsciiBitmap.Builder()
                 .setHeight(2)
@@ -68,6 +76,7 @@ public class AsciiBitmapTests extends TestCase {
         bitMap.drawChar(3,0,'.');
         assertEquals(" . .\n    ", bitMap.toString());
     }
+    @Test
     public void testInvalidParameter()  {
         try {
             AsciiBitmap bitMap = new AsciiBitmap.Builder()

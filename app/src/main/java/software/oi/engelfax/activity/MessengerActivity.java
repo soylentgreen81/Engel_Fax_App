@@ -24,6 +24,7 @@ public class MessengerActivity extends AppCompatActivity {
     private ImageButton sendButton;
     public static final String MAGIC_WORD = "ENGELPOWER";
     private static final int REQUEST_SMS = 1;
+    private static final String TEXT_KEY = "TEXT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,6 @@ public class MessengerActivity extends AppCompatActivity {
 
 
 
-    public static final String TEXT_KEY = "TEXT";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -67,8 +67,7 @@ public class MessengerActivity extends AppCompatActivity {
 
 
     private void startPreview(){
-        Intent intent = new Intent(this, PreviewActivity.class);
-        intent.putExtra(TEXT_KEY, getText());
+        Intent intent = PreviewActivity.makeIntent(this, getText());
         startActivityForResult(intent, REQUEST_SMS);
 
     }
