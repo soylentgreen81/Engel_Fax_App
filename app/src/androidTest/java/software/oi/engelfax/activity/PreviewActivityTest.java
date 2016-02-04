@@ -60,12 +60,14 @@ public class PreviewActivityTest {
     @Test
     public void testSimpleSMS() throws InterruptedException {
         onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(1000);
         assertEquals(MESSAGE, mSmsText);
     }
     @Test
     public void testPrefixSMS() throws InterruptedException {
         onView(withId(R.id.container)).perform(swipeLeft());
         onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(1000);
         assertEquals("#AA " + MESSAGE, mSmsText);
     }
 
