@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_delete"
-                app:fab_colorNormal="@color/colorSelected"
+                app:fab_colorNormal="@color/colorAccent"
                 app:fab_size="mini"
                 app:fab_title=" "
                 app:fab_colorPressed="@color/colorSelected"/>
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/punkt"
-                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorNormal="@color/colorSelected"
                 app:fab_size="mini"
                 app:fab_title="."
                 app:fab_colorPressed="@color/colorSelected"/>
