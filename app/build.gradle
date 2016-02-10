@@ -15,8 +15,8 @@ android {
         applicationId "software.oi.engelfax"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.0.2.8"
+        versionCode 6
+        versionName "1.0.2.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

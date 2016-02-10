@@ -247,12 +247,12 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
                                 startActivity(intent);
                             }
                         }).show();
+                fab.setEnabled(true);
+                fab.showProgress(false);
             }
         }else {
             Snackbar.make(fab, getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            fab.setEnabled(true);
-            fab.showProgress(false);
         }
     }
 
