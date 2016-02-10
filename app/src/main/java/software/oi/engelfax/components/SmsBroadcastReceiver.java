@@ -15,13 +15,13 @@ import software.oi.engelfax.R;
  * Created by Stefan Beukmann on 31.01.2016.
  */
 public final class SmsBroadcastReceiver extends BroadcastReceiver {
-    public interface SmsSentCallback{
+    public interface SmsSentCallbacks {
         void onSmsSentSuccess();
         void onSmsSentError(String message);
 
     }
-    private final WeakReference<SmsSentCallback> callback;
-    public SmsBroadcastReceiver(SmsSentCallback callback){
+    private final WeakReference<SmsSentCallbacks> callback;
+    public SmsBroadcastReceiver(SmsSentCallbacks callback){
         this.callback = new WeakReference<>(callback);
     }
     @Override

@@ -5,6 +5,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="software.oi.engelfax.activity.PaintActivity">
 
 
@@ -32,51 +33,89 @@
             android:layout_gravity="center"
             />
     </LinearLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp"
-        android:id="@+id/linearLayout">
-        <Button
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/drawMode"
-            android:textColor="#fff"
-            android:background="@drawable/back_button_selected"
-      />
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="8dp"
-            android:contentDescription="@string/erase"
-            android:id="@+id/eraseMode"
-            android:src="@android:drawable/ic_menu_delete"
-            android:background="@drawable/back_button"
-            android:layout_toRightOf="@+id/drawMode" />
 
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/floatingActionMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+
             android:layout_marginLeft="8dp"
-            android:id="@+id/adjustImage"
-            android:src="@android:drawable/ic_menu_preferences"
-            android:background="@drawable/back_button"
-            android:contentDescription="@string/adjust"
-            android:layout_toRightOf="@+id/eraseMode" />
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="8dp"
-            android:visibility="visible"
+            android:layout_marginStart="8dp"
+            app:fab_addButtonColorNormal="@color/colorAccent"
+            app:fab_addButtonColorPressed="@color/colorSelected"
+            app:fab_addButtonPlusIconColor="#fff"
+            app:fab_addButtonSize="mini">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/drawButtonCharacter1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_delete"
+                app:fab_colorNormal="@color/colorSelected"
+                app:fab_size="mini"
+                app:fab_title=" "
+                app:fab_colorPressed="@color/colorSelected"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/drawButtonCharacter2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/punkt"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_size="mini"
+                app:fab_title="."
+                app:fab_colorPressed="@color/colorSelected"/>
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/drawButtonCharacter3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/plus"
+
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_size="mini"
+                app:fab_title="+"
+                app:fab_colorPressed="@color/colorSelected"/>
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/drawButtonCharacter4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/raute"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_size="mini"
+                app:fab_title="#"
+                app:fab_colorPressed="@color/colorSelected"/>
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="12dp"
+        android:id="@+id/adjustImage"
+        android:src="@android:drawable/ic_menu_preferences"
+        android:background="@drawable/back_button"
+        android:contentDescription="@string/adjust"
+        android:layout_toRightOf="@+id/floatingActionMenu"
+        android:layout_alignParentBottom="true"/>
+         <mbanje.kurt.fabbutton.FabButton
             android:id="@+id/sendButton"
-            android:contentDescription="@string/send"
-            android:src="@android:drawable/ic_menu_send"
-            android:background="@drawable/back_button"
-            android:layout_alignParentEnd="true" />
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:color="@color/colorAccent"
+             android:layout_alignParentRight="true"
+             android:layout_alignParentEnd="true"
+             android:layout_alignParentBottom="true"
+            android:layout_margin="0dp"
+            android:indeterminate="true"
+            app:fbb_autoStart="true"
+            app:fbb_progressColor="@color/colorAccent"
+            app:fbb_progressWidthRatio="0.1"
+            android:src="@android:drawable/ic_dialog_email"></mbanje.kurt.fabbutton.FabButton>
 
-    </RelativeLayout>
 
 </RelativeLayout>

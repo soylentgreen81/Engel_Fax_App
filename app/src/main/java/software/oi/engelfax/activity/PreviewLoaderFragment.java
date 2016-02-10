@@ -142,9 +142,9 @@ public class PreviewLoaderFragment extends Fragment {
             String text = textArray[0];
             texts.add(new PreviewText("", "Simple", TextUtils.wordWrap(text, 24) + emptyLine));
             try {
-                texts.addAll(readCSV("asciiart","art.csv", "A", text));
-                texts.addAll(readCSV("fonts","fonts.csv", "F", text));
-                texts.addAll(readCSV("cowsay", "cowsay.csv", "C", text));
+                texts.addAll(readCSV("asciiart","art.csv", PreviewActivity.ASCII_ART, text));
+                texts.addAll(readCSV("fonts","fonts.csv", PreviewActivity.FIGLET, text));
+                texts.addAll(readCSV("cowsay", "cowsay.csv", PreviewActivity.COWSAY, text));
             }
             catch (Exception ex){
                 Log.w(TAG, ex.getMessage(), ex);

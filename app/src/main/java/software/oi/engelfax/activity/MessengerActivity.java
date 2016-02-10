@@ -3,10 +3,11 @@ package software.oi.engelfax.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import software.oi.engelfax.util.Preferences;
 public class MessengerActivity extends AppCompatActivity {
     private static final String TAG = MessengerActivity.class.getSimpleName();
     private EditText nachrichtEditText;
+    private DrawerLayout drawerLayout;
     private ImageButton sendButton;
     public static final String MAGIC_WORD = "ENGELPOWER";
     private static final int REQUEST_SMS = 1;
@@ -35,7 +37,10 @@ public class MessengerActivity extends AppCompatActivity {
         if (ab != null) {
             ab.setTitle(getString(R.string.title));
             ab.setSubtitle(getString(R.string.sub_title));
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         nachrichtEditText = (EditText)  findViewById(R.id.nachrichtEditText);
         sendButton = (ImageButton) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -44,9 +49,43 @@ public class MessengerActivity extends AppCompatActivity {
                 startPreview();
             }
         });
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
 
     }
 
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        drawerLayout.closeDrawers();
+                        switch ( menuItem.getItemId()){
+                            case R.id.action_paint: {
+                                Intent intent = new Intent(MessengerActivity.this, PaintActivity.class);
+                                startActivityForResult(intent, REQUEST_SMS);
+                                return true;
+                            }
+                            case R.id.action_settings: {
+                                Intent intent = new Intent(MessengerActivity.this, SettingsActivity.class);
+                                startActivity(intent);
+                                return true;
+                            }
+                            case R.id.action_scan_qr: {
+                                IntentIntegrator intentIntegrator = new IntentIntegrator(MessengerActivity.this);
+                                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                                intentIntegrator.setPrompt(getString(R.string.scan_qr));
+                                intentIntegrator.initiateScan();
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+
+                });
+    }
 
 
 
@@ -102,31 +141,17 @@ public class MessengerActivity extends AppCompatActivity {
             }
         }
     }
- @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_engel_messenger, menu);
-        return true;
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.action_paint: {
-                Intent intent = new Intent(this, PaintActivity.class);
-                startActivityForResult(intent, REQUEST_SMS);
+            case android.R.id.home: {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawers();
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
                 return true;
-            }
-            case R.id.action_settings: {
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-            }
-            case R.id.action_scan_qr: {
-                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                intentIntegrator.setPrompt(getString(R.string.scan_qr));
-                intentIntegrator.initiateScan();
             }
             default:
                 return super.onOptionsItemSelected(item);

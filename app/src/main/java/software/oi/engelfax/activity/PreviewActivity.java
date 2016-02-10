@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,7 +28,7 @@ import software.oi.engelfax.components.SmsBroadcastReceiver;
 import software.oi.engelfax.util.GsmUtils;
 import software.oi.engelfax.util.PhoneNumberException;
 
-public final class PreviewActivity extends AppCompatActivity implements  PreviewLoaderFragment.TaskCallbacks, SmsBroadcastReceiver.SmsSentCallback {
+public final class PreviewActivity extends AppCompatActivity implements  PreviewLoaderFragment.TaskCallbacks, SmsBroadcastReceiver.SmsSentCallbacks {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,7 +44,7 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
     public final static String COWSAY = "C";
     public final static int WIDTH = 24;
     private Spinner styleChooser;
-    private FloatingActionButton fab;
+    private mbanje.kurt.fabbutton.FabButton fab;
     private final String TAG = PreviewActivity.class.getSimpleName();
     private ArrayList<PreviewText> previews;
     private BroadcastReceiver sentReceiver;
@@ -64,9 +64,11 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
         setContentView(R.layout.activity_engel_preview);
         styleChooser = (Spinner) findViewById(R.id.styleSpinner);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (mbanje.kurt.fabbutton.FabButton ) findViewById(R.id.fab);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // get Text
         final String text = getIntent().getStringExtra(TEXT_KEY);
@@ -131,6 +133,15 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
 
     }
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    @Override
     public void onStart(){
         super.onStart();
         registerReceiver(sentReceiver, new IntentFilter(GsmUtils.SMS_SENT));
@@ -181,7 +192,7 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
             Snackbar.make(fab, message, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         fab.setEnabled(true);
-        fab.setVisibility(View.VISIBLE);
+        fab.showProgress(false);
 
     }
 
@@ -223,7 +234,7 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
         text = prefix + text;
         if (!"".equals(text)){
             fab.setEnabled(false);
-            fab.setVisibility(View.INVISIBLE);
+            fab.showProgress(true);
             try {
                 GsmUtils.sendSms(this, text);
             }
@@ -241,7 +252,7 @@ public final class PreviewActivity extends AppCompatActivity implements  Preview
             Snackbar.make(fab, getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             fab.setEnabled(true);
-            fab.setVisibility(View.VISIBLE);
+            fab.showProgress(false);
         }
     }
 

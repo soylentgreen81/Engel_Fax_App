@@ -83,11 +83,11 @@ public class AsciiBitmap implements Parcelable{
     public void invert(){
         bits.flip(0 ,height*bitdepth*width);
     }
-    private BitSet toBitSet(int n, int length){
+    private static BitSet toBitSet(int number, int length){
         BitSet binary = new BitSet(length);
-        char[] bins = String.format("%"+length+"s", Integer.toBinaryString(n)).replace(' ', '0').toCharArray();
+        char[] bins = String.format("%"+length+"s", Integer.toBinaryString(number)).replace(' ', '0').toCharArray();
         if (bins.length>length){
-            throw new IllegalArgumentException(String.format("%d does not fit in %d bits", n, length));
+            throw new IllegalArgumentException(String.format("%d does not fit in %d bits", number, length));
         }
         for (int i=0;i<length;i++){
             if (bins[i] == '1')
@@ -108,6 +108,8 @@ public class AsciiBitmap implements Parcelable{
     private int getOffset(int x, int y){
         return  (y* width * bitdepth) + (x * bitdepth);
     }
+
+    @Override
     public String toString(){
         StringBuilder result = new StringBuilder();
         for (int y=0;y<height;y++) {
