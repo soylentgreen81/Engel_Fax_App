@@ -34,5 +34,9 @@
     <string name="send">Senden</string>
     <string name="erase">Löschen</string>
     <string name="adjust">Anpassen</string>
+    <string name="adjust_brightness">Helligkeit anpassen</string>
+    <string name="paint_title_short">Zeichenbrett</string>
+    <string name="paint_subtitle_short">Mal es fettich!</string>
+    <string name="error_no_image_loaded">Fehler: Kein Bild geladen!</string>
 
 </resources>

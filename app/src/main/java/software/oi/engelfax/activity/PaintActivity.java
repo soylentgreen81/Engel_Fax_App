@@ -9,12 +9,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +40,6 @@ import software.oi.engelfax.util.PhoneNumberException;
 public final class PaintActivity extends AppCompatActivity implements SmsBroadcastReceiver.SmsSentCallbacks {
     private TextView paintView;
     private FabButton sendButton;
-    private ImageButton adjustButton;
     private FloatingActionButton drawButtonCharacter1;
     private FloatingActionButton drawButtonCharacter2;
     private FloatingActionButton drawButtonCharacter3;
@@ -55,14 +55,20 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
     private Bitmap sourceImage;
     private int selectedModeId;
     private final char[] alphabet = new char[]{' ','.','+','#'};
-    private int currentChar = 1;
+    private int currentChar = 3;
     private SmsBroadcastReceiver sentReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_paint);
+
+        final ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(R.string.paint_title_short);
+            ab.setSubtitle(R.string.paint_subtitle_short);
+            ab.setHomeButtonEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
         if (savedInstanceState != null){
             asciiBitmap =  savedInstanceState.getParcelable(ASCII_IMAGE_KEY);
             sourceImage =  savedInstanceState.getParcelable(SOURCE_IMAGE);
@@ -77,10 +83,9 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
                                          .build();
         }
 
-      //  selectedModeId = R.id.drawMode;
         paintView = (TextView) findViewById(R.id.paintArea);
         paintView.setTypeface(Typeface.MONOSPACE);
-        showPreview();
+
 
         paintView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -94,7 +99,7 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
               modeSwitch(v);
             }
         };
-        selectedModeId = R.id.drawButtonCharacter1;
+        selectedModeId = R.id.drawButtonCharacter4;
         drawButtonCharacter1 = (FloatingActionButton) findViewById(R.id.drawButtonCharacter1);
         drawButtonCharacter1.setOnClickListener(modeSelectListener);
         drawButtonCharacter2 = (FloatingActionButton) findViewById(R.id.drawButtonCharacter2);
@@ -104,7 +109,6 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
         drawButtonCharacter4 = (FloatingActionButton) findViewById(R.id.drawButtonCharacter4);
         drawButtonCharacter4.setOnClickListener(modeSelectListener);
 
-
         sendButton = (FabButton) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,15 +116,9 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
                 send();
             }
         });
-        adjustButton  = (ImageButton) findViewById(R.id.adjustImage);
-        adjustButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAdjustDialog();
-            }
-        });
-        adjustButton.setVisibility(View.INVISIBLE);
+
         sentReceiver = new SmsBroadcastReceiver(this);
+        showPreview();
     }
     @Override
     public void onStart(){
@@ -150,8 +148,8 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
     }
 
     private void modeSwitch(View v) {
-        ((FloatingActionButton) findViewById(selectedModeId)).setColorNormal(getResources().getColor(R.color.colorAccent));
-        ((FloatingActionButton) v).setColorNormal(getResources().getColor(R.color.colorSelected));
+        ((FloatingActionButton) findViewById(selectedModeId)).setColorNormal(ContextCompat.getColor(this, R.color.colorAccent));
+        ((FloatingActionButton) v).setColorNormal(ContextCompat.getColor(this, R.color.colorSelected));
         if (v.getId() == R.id.drawButtonCharacter1)
             currentChar = 0;
         else if (v.getId() == R.id.drawButtonCharacter2)
@@ -208,6 +206,7 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
                 return true;
             case R.id.clearImage:
                 asciiBitmap.clear();
+                sourceImage = null;
                 showPreview();
                 return true;
             case R.id.loadImage:
@@ -216,6 +215,12 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
             case R.id.invertImage:
                 asciiBitmap.invert();
                 showPreview();
+                return true;
+            case R.id.adjustBrightness:
+                if (sourceImage != null)
+                    showAdjustDialog();
+                else
+                    Snackbar.make(sendButton, R.string.error_no_image_loaded, Snackbar.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -226,7 +231,7 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
     protected void onActivityResult(int requestCode, int resultCode, Intent result) {
         if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
             beginCrop(result.getData());
-        } else if (requestCode == Crop.REQUEST_CROP) {
+        } else if (requestCode == Crop.REQUEST_CROP && resultCode == RESULT_OK) {
             handleCrop(resultCode, result);
         }
     }
@@ -304,8 +309,6 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
         protected void onPostExecute(Bitmap result) {
             sourceImage = result;
             previewBitmap();
-            if (sourceImage != null)
-                adjustButton.setVisibility(View.VISIBLE);
-        }
+          }
     }
 }

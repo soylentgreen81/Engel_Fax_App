@@ -32,6 +32,10 @@
     <string name="send">Send</string>
     <string name="erase">Erase</string>
     <string name="adjust">Adjust</string>
+    <string name="adjust_brightness">Adjust brightness</string>
+    <string name="paint_title_short">Drawing</string>
+    <string name="paint_subtitle_short">a nice picture</string>
+    <string name="error_no_image_loaded">No image Loaded</string>
 
 
 </resources>

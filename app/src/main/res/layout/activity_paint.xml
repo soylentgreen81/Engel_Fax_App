@@ -17,8 +17,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_alignParentTop="true"
-        android:orientation="vertical"
-       >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,7 +27,7 @@
             android:padding="0dp"
             android:background="#000"
             android:textColor="#fff"
-            android:textSize="18sp"
+            android:textSize="19dp"
 
             android:layout_gravity="center"
             />
@@ -65,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/punkt"
-                app:fab_colorNormal="@color/colorSelected"
+                app:fab_colorNormal="@color/colorAccent"
                 app:fab_size="mini"
                 app:fab_title="."
                 app:fab_colorPressed="@color/colorSelected"/>
@@ -84,24 +83,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/raute"
-                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorNormal="@color/colorSelected"
                 app:fab_size="mini"
                 app:fab_title="#"
                 app:fab_colorPressed="@color/colorSelected"/>
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
-    <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
 
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="12dp"
-        android:id="@+id/adjustImage"
-        android:src="@android:drawable/ic_menu_preferences"
-        android:background="@drawable/back_button"
-        android:contentDescription="@string/adjust"
-        android:layout_toRightOf="@+id/floatingActionMenu"
-        android:layout_alignParentBottom="true"/>
          <mbanje.kurt.fabbutton.FabButton
             android:id="@+id/sendButton"
             android:layout_width="@dimen/fab_size"
