@@ -9,6 +9,7 @@
 1. [About](#about)
 2. [Prerequisites](#prerequisites)
 3. [How to get it](#how-to-get-it)
+4. [Used libraries](#used-libraries)
 
 ## About
 
@@ -34,3 +35,10 @@ For more information on the message format check the [Wiki](https://github.com/s
 ## How to get it
 * Check if you can install APKs from Unknown Sources (Settings -> Security -> Unknown Sources) [via](http://developer.android.com/distribute/tools/open-distribution.html)
 * Download the APK from the [Latest Releases](https://github.com/soylentgreen81/Engel_Fax_App/releases/latest) and install it
+
+## Used libraries
+* [jdamcd/android-crop](https://github.com/jdamcd/android-crop)
+* [journeyapps/zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
+* [futuresimple/android-floating-action-button](https://github.com/futuresimple/android-floating-action-button)
+* [ckurtm/FabButton](https://github.com/ckurtm/FabButton)
+
