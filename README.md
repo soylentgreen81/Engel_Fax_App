@@ -36,9 +36,11 @@ For more information on the message format check the [Wiki](https://github.com/s
 * Check if you can install APKs from Unknown Sources (Settings -> Security -> Unknown Sources) [via](http://developer.android.com/distribute/tools/open-distribution.html)
 * Download the APK from the [Latest Releases](https://github.com/soylentgreen81/Engel_Fax_App/releases/latest) and install it
 
-## Used libraries
+## Used libraries / Icons
 * [jdamcd/android-crop](https://github.com/jdamcd/android-crop)
 * [journeyapps/zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
 * [futuresimple/android-floating-action-button](https://github.com/futuresimple/android-floating-action-button)
 * [ckurtm/FabButton](https://github.com/ckurtm/FabButton)
-
+* Icons made by [Daniel Bruce](http://www.flaticon.com/authors/daniel-bruce)  from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/) 
+* Icons made by [Freepik](http://www.freepik.com)  from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/) 
+* Icons made by [Iconmoon](http://www.icomoon.io)  from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/) 

@@ -48,12 +48,29 @@
             app:fab_addButtonColorPressed="@color/colorSelected"
             app:fab_addButtonPlusIconColor="#fff"
             app:fab_addButtonSize="mini">
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/drawButtonCharacter6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/rubber"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_size="mini"
+                app:fab_title=" "
+                app:fab_colorPressed="@color/colorSelected"/>
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/drawButtonCharacter5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/brush"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_size="mini"
+                app:fab_title=" "
+                app:fab_colorPressed="@color/colorSelected"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/drawButtonCharacter1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_delete"
                 app:fab_colorNormal="@color/colorAccent"
                 app:fab_size="mini"
                 app:fab_title=" "

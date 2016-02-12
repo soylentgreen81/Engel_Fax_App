@@ -73,7 +73,7 @@ public class AsciiBitmapTests  {
         bitMap.drawChar(0,0,' ');
         bitMap.drawChar(1,0,'.');
         bitMap.drawChar(2,0,' ');
-        bitMap.drawChar(3,0,'.');
+        bitMap.drawChar(3, 0, '.');
         assertEquals(" . .\n    ", bitMap.toString());
     }
     @Test
@@ -87,5 +87,7 @@ public class AsciiBitmapTests  {
         } catch(IllegalArgumentException ex){
         }
     }
+
+
 }
 

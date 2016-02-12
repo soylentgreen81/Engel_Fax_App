@@ -44,6 +44,9 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
     private FloatingActionButton drawButtonCharacter2;
     private FloatingActionButton drawButtonCharacter3;
     private FloatingActionButton drawButtonCharacter4;
+    private FloatingActionButton drawButtonCharacter5;
+    private FloatingActionButton drawButtonCharacter6;
+
     private static final String ASCII_IMAGE_KEY = "ASCII_IMAGE";
     private static final String  BRIGHTNESS_THRESHOLD ="BRIGHTNESS_THRESHOLD";
     private static final String SOURCE_IMAGE = "SOURCE_IMAGE";
@@ -108,7 +111,10 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
         drawButtonCharacter3.setOnClickListener(modeSelectListener);
         drawButtonCharacter4 = (FloatingActionButton) findViewById(R.id.drawButtonCharacter4);
         drawButtonCharacter4.setOnClickListener(modeSelectListener);
-
+        drawButtonCharacter5 = (FloatingActionButton) findViewById(R.id.drawButtonCharacter5);
+        drawButtonCharacter5.setOnClickListener(modeSelectListener);
+        drawButtonCharacter6 = (FloatingActionButton) findViewById(R.id.drawButtonCharacter6);
+        drawButtonCharacter6.setOnClickListener(modeSelectListener);
         sendButton = (FabButton) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,21 +136,40 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
         super.onPause();
         unregisterReceiver(sentReceiver);
     }
+    private int lastX = -1;
+    private int lastY = -1;
     private boolean draw(View v, MotionEvent event) {
-        if (event.getPointerCount() == 1) {
-            for (int i = 0; i < event.getHistorySize(); i++) {
-                int x = (int) (event.getHistoricalX(i) * WIDTH / v.getWidth());
-                int y = (int) (event.getHistoricalY(i) * HEIGHT / v.getHeight());
-                char draw = alphabet[currentChar];
-                int pos = y * WIDTH + y + x;
-                if (y < HEIGHT && y >= 0 && x < WIDTH && x >= 0 && paintView.getText().charAt(pos) != draw) {
-                    asciiBitmap.drawChar(x, y, draw);
-                    paintView.setText(asciiBitmap.toString());
+        if (event.getAction() == android.view.MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
+            if (event.getPointerCount() == 1) {
+                for (int i = 0; i < event.getHistorySize(); i++) {
+                    int x = (int) (event.getHistoricalX(i) * WIDTH / v.getWidth());
+                    int y = (int) (event.getHistoricalY(i) * HEIGHT / v.getHeight());
+                    int pos = y * WIDTH + y + x;
+                    if (y < HEIGHT && y >= 0 && x < WIDTH && x >= 0 && (x!= lastX || y != lastY)) {
+                        if (currentChar < 4){
+                            char draw = alphabet[currentChar];
+                            asciiBitmap.drawChar(x, y, draw);
+                        }
+                        else {
+                            if (currentChar == 4) {
+                                asciiBitmap.brush(x, y);
+                            } else {
+                                asciiBitmap.erase(x, y);
+                            }
+                        }
+                        paintView.setText(asciiBitmap.toString());
+                        lastX = x;
+                        lastY = y;
+                    }
                 }
+                return true;
             }
+        } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+            lastX = -1;
+            lastY = -1;
             return true;
-        } else
-            return false;
+        }
+        return false;
     }
 
     private void modeSwitch(View v) {
@@ -158,6 +183,10 @@ public final class PaintActivity extends AppCompatActivity implements SmsBroadca
             currentChar = 2;
         else if (v.getId() == R.id.drawButtonCharacter4)
             currentChar = 3;
+        else if (v.getId() == R.id.drawButtonCharacter5)
+            currentChar = 4;
+        else if (v.getId() == R.id.drawButtonCharacter6)
+            currentChar = 5;
         selectedModeId = v.getId();
     }
 
