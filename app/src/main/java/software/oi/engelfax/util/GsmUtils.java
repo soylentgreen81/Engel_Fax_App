@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 
+import java.util.ArrayList;
+
 import software.oi.engelfax.R;
 
 /**
@@ -17,9 +19,19 @@ public abstract class GsmUtils {
     public static void sendSms(final Context context, String message) throws PhoneNumberException{
         String phoneNumber = Preferences.getNumber(context);
         if (PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
-            PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(SMS_SENT), 0);
+
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null,  message, sentPendingIntent, null);
+            ArrayList<String>  parts = smsManager.divideMessage(message);
+            ArrayList<PendingIntent> intents = new ArrayList<>(parts.size());
+            for (int i=0;i<parts.size();i++){
+                intents.add(PendingIntent.getBroadcast(context, 0, new Intent(SMS_SENT), 0));
+            }
+            if (parts.size() == 1) {
+                smsManager.sendTextMessage(phoneNumber, null, parts.get(0), intents.get(0), null);
+            } else {
+                smsManager.sendMultipartTextMessage(phoneNumber, null, parts, intents, null);
+
+            }
         }
         else {
             String error;
@@ -32,4 +44,5 @@ public abstract class GsmUtils {
             throw new PhoneNumberException(error);
         }
     }
+
 }
