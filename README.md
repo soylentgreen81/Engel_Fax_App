@@ -1,5 +1,4 @@
 # Engel Fax
-===============================
 
 ![Build status](https://travis-ci.org/soylentgreen81/Engel_Fax_App.svg?branch=master)
 
