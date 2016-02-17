@@ -13,7 +13,7 @@
 4. [Used libraries](#used-libraries--icons)
 
 ## About
-A SMS sending Application for Android, which offers several means of communication
+A SMS application for Android, which offers several means of communication
 * Sending clear text sms (plain & simple & pretty boring)
 * Sending ascii art sms using a prefix. Three flavors available: 
    * #A + Index -> static Ascii Art 
