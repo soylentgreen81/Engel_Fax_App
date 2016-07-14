@@ -15,6 +15,7 @@ import software.oi.engelfax.R;
  */
 public abstract class GsmUtils {
     public static final String SMS_SENT = "SMS_SENT";
+    public static final String SMS_DELIVERED = "SMS_DELIVERED";
 
     public static void sendSms(final Context context, String message) throws PhoneNumberException{
         String phoneNumber = Preferences.getNumber(context);
@@ -22,14 +23,16 @@ public abstract class GsmUtils {
 
             SmsManager smsManager = SmsManager.getDefault();
             ArrayList<String>  parts = smsManager.divideMessage(message);
-            ArrayList<PendingIntent> intents = new ArrayList<>(parts.size());
+            ArrayList<PendingIntent> sentIntents = new ArrayList<>(parts.size());
+            ArrayList<PendingIntent> deliveredIntents = new ArrayList<>(parts.size());
             for (int i=0;i<parts.size();i++){
-                intents.add(PendingIntent.getBroadcast(context, 0, new Intent(SMS_SENT), 0));
+                sentIntents.add(PendingIntent.getBroadcast(context, 0, new Intent(SMS_SENT), 0));
+                deliveredIntents.add(PendingIntent.getBroadcast(context, 0, new Intent(SMS_DELIVERED), 0));
             }
             if (parts.size() == 1) {
-                smsManager.sendTextMessage(phoneNumber, null, parts.get(0), intents.get(0), null);
+                smsManager.sendTextMessage(phoneNumber, null, parts.get(0), sentIntents.get(0), deliveredIntents.get(0));
             } else {
-                smsManager.sendMultipartTextMessage(phoneNumber, null, parts, intents, null);
+                smsManager.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, deliveredIntents);
 
             }
         }
